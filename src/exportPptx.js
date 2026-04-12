@@ -181,11 +181,6 @@ export async function exportToPptx(result, form) {
             fill: { color: 'e8f4d8' },
             line: { color: 'dce6cc', width: 1 }
           })
-          slide.addText('🌿', {
-            x: x + 0.1, y: y + 0.5,
-            w: cardW - 0.2, h: 0.6,
-            fontSize: 28, align: 'center'
-          })
         }
 
         // Common name

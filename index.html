@@ -3,11 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Land AI — Landscape Design Tool</title>
+    <title>Land Pal — Landscape Intelligence</title>
     <meta name="description" content="AI-powered landscape palette generator for softscape and hardscape design." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    <style>
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      html,body,#root{min-height:100%}
+      html{scroll-behavior:smooth}
+      body{background:#f8f7f2}
+      #root>*{animation:rootFade .25s ease-out}
+      @keyframes rootFade{from{opacity:0}to{opacity:1}}
+    </style>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

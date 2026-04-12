@@ -4,8 +4,18 @@ import { savePalette } from './palettes.js'
 import History from './History.jsx'
 import { exportToPptx } from './exportPptx.js'
 import { exportToDxf } from './exportDxf.js'
+import GlobeView from './GlobeView.jsx'
+import imgSoftscape from './assets/softscape.jpeg'
+import imgHardscape from './assets/Hardscape.jpeg'
+import imgBoth from './assets/Both.jpeg'
+import imgProjectSetup from './assets/project_setup.jpeg'
+import imgPlants from './assets/pant_categories.jpeg'
+import imgStyle from './assets/panting_style.jpeg'
+import imgColour from './assets/seasonality.jpg'
+import imgConditions from './assets/special conditions.jpg'
 
-const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap');`;
+const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500;1,600&family=Plus+Jakarta+Sans:ital,opsz,wght@0,6..30,300;0,6..30,400;0,6..30,500;0,6..30,600;0,6..30,700;1,6..30,400&display=swap');
+@import url('https://fonts.cdnfonts.com/css/garet');`;
 
 /* ══════════ COUNTRY DATA ══════════ */
 const COUNTRY_GROUPS = [
@@ -279,228 +289,278 @@ const HD_ZONES=["Pedestrian Paths & Walkways","Main Plaza / Open Paved Area","Po
 const HD_COLORS=[{label:"White & Light Cream",hex:"#f5f0e8"},{label:"Warm Beige & Sand",hex:"#d4b896"},{label:"Terracotta & Rust",hex:"#c06840"},{label:"Warm Grey",hex:"#b0a898"},{label:"Cool / Blue-Grey (Slate)",hex:"#7888a0"},{label:"Charcoal & Dark Grey",hex:"#585858"},{label:"Black",hex:"#282828"},{label:"Earthy Brown",hex:"#8a5830"},{label:"Warm Yellow / Honey",hex:"#d4a020"},{label:"Green Tones (Moss, Patina)",hex:"#607848"},{label:"Mixed / Varied",hex:"#aaa"}];
 const HD_PATTERNS=["Running Bond","Herringbone","Basket Weave","Opus Incertum (Random / Irregular)","Ashlar (Coursed Random)","Versailles / Opus Francigenum","Stack Bond (Grid)","Fan / Compass","Diagonal","No Preference / Let AI Suggest"];
 
+const CHAPTER_LABELS={"location":"The Origin","project":"The Context","palette-type":"The Direction","style":"The Language","plants":"The Palette","colour":"The Mood","conditions":"The Environment","hd-materials":"The Foundation","hd-zones":"The Territory","brief":"The Vision"};
+
+const STEP_IMAGES={
+  "style":imgStyle,
+  "plants":imgPlants,
+  "colour":imgColour,
+  "conditions":imgConditions,
+  "brief":"https://images.unsplash.com/photo-1470058869958-2a77ade41c02?auto=format&fit=crop&w=900&q=80",
+};
+
 const CSS=`
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#0f0f0f;color:#f0ede6}
+body{background:#f9faf8;color:#163422}
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+.app{min-height:100vh;background:#f9faf8;color:#163422;font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;font-size:15px;}
 
-.app{min-height:100vh;background:#0f0f0f;color:#f0ede6;font-family:'Inter',sans-serif;font-weight:300;font-size:15px;}
+.hdr{padding:24px 56px;display:flex;align-items:center;justify-content:space-between;background:#163422;position:sticky;top:0;z-index:50}
+.hdr-brand{display:flex;align-items:center;gap:14px}
+.hdr-logo{width:32px;height:32px;background:rgba(200,235,208,0.1);border:1px solid rgba(200,235,208,0.18);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#c8ebd0}
+.hdr-name{font-family:'Garet',sans-serif;font-size:20px;color:#ffffff;letter-spacing:.01em;font-weight:400;font-style:normal}
+.hdr-sub{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,240,232,0.3);margin-top:2px;font-weight:500}
 
-.hdr{padding:18px 48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,169,110,0.2);background:#0f0f0f;position:sticky;top:0;z-index:50}
-.hdr-brand{display:flex;align-items:center;gap:16px}
-.hdr-logo{width:32px;height:32px;border:1px solid rgba(200,169,110,0.4);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#c8a96e}
-.hdr-name{font-family:'Playfair Display',serif;font-size:18px;color:#f0ede6;letter-spacing:.06em;font-weight:400}
-.hdr-sub{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,169,110,0.6);margin-top:2px}
+.main{padding:60px 56px 80px;max-width:680px}
+.wizard-body{display:flex;min-height:calc(100vh - 69px);position:relative}
+.wizard-left{flex:1;overflow-y:auto;position:relative;z-index:2}
+.wizard-globe-bg{position:fixed;right:0;top:69px;width:55%;height:calc(100vh - 69px);z-index:0;pointer-events:none}
+.wizard-globe-fade{position:fixed;right:0;top:69px;width:55%;height:calc(100vh - 69px);background:linear-gradient(to right,rgba(249,250,248,1) 0%,rgba(249,250,248,0.3) 35%,rgba(249,250,248,0) 65%);z-index:1;pointer-events:none}
+.wizard-photo-bg{position:fixed;right:0;top:69px;width:55%;height:calc(100vh - 69px);z-index:0;pointer-events:none;background-size:cover;background-position:center}
+.wizard-photo-fade{position:fixed;right:0;top:69px;width:55%;height:calc(100vh - 69px);background:linear-gradient(to right,rgba(249,250,248,1) 0%,rgba(249,250,248,0.3) 35%,rgba(249,250,248,0) 65%);z-index:1;pointer-events:none}
+@media(max-width:900px){.main{padding:40px 24px 80px}}
 
-.prog{padding:0 48px;background:#0f0f0f;border-bottom:1px solid rgba(240,237,230,0.06)}
-.prog-inner{display:flex;align-items:center;gap:0;padding:16px 0}
-.prog-step{display:flex;align-items:center;gap:8px;cursor:default}
-.prog-step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;letter-spacing:.02em;transition:all .3s;flex-shrink:0}
-.prog-step-num.done{background:#c8a96e;color:#0f0f0f}
-.prog-step-num.active{background:transparent;border:1.5px solid #c8a96e;color:#c8a96e}
-.prog-step-num.pending{background:transparent;border:1px solid rgba(240,237,230,0.15);color:rgba(240,237,230,0.3)}
-.prog-step-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;transition:color .3s}
-.prog-step-label.done,.prog-step-label.active{color:#c8a96e}
-.prog-step-label.pending{color:rgba(240,237,230,0.25)}
-.prog-line{flex:1;height:1px;background:rgba(240,237,230,0.08);margin:0 12px;min-width:20px}
-.prog-line.done{background:rgba(200,169,110,0.3)}
-
-.main{max-width:760px;margin:0 auto;padding:60px 24px 80px}
-.stp-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,169,110,0.6);margin-bottom:20px;display:flex;align-items:center;gap:12px}
-.stp-eyebrow::after{content:'';flex:1;height:1px;background:rgba(200,169,110,0.15)}
-.stp-title{font-family:'Playfair Display',serif;font-size:42px;font-weight:400;color:#f0ede6;line-height:1.1;margin-bottom:12px}
-.stp-title em{font-style:italic;color:#c8a96e}
-.stp-desc{font-size:13px;color:rgba(240,237,230,0.5);line-height:1.8;max-width:480px;margin-bottom:40px}
+.stp-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:18px;display:flex;align-items:center;gap:12px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif}
+.stp-eyebrow::after{content:'';flex:1;height:1px;background:rgba(22,52,34,0.07)}
+.stp-title{font-family:'Garet',sans-serif;font-size:48px;font-weight:400;font-style:normal;color:#163422;line-height:1.1;margin-bottom:10px;letter-spacing:-.01em}
+.stp-title em{font-style:normal;color:#4c644e;font-weight:300}
+.stp-desc{font-size:14px;color:#4c644e;line-height:1.85;max-width:480px;margin-bottom:40px;font-weight:300}
 
 .sect{margin-bottom:32px}
-.sl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,110,0.5);margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.sl::after{content:'';flex:1;height:1px;background:rgba(200,169,110,0.1)}
+.sl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:14px;display:flex;align-items:center;gap:10px;font-weight:600}
+.sl::after{content:'';flex:1;height:1px;background:rgba(22,52,34,0.06)}
 
-select,input,textarea{background:rgba(240,237,230,0.04);border:1px solid rgba(240,237,230,0.12);border-radius:4px;color:#f0ede6;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:300;padding:12px 16px;outline:none;transition:border-color .2s;width:100%}
-select:focus,input:focus,textarea:focus{border-color:rgba(200,169,110,0.5)}
-select option{background:#1a1a1a;color:#f0ede6}
+select,input,textarea{background:#ffffff;border:1.5px solid rgba(22,52,34,0.1);border-radius:14px;color:#163422;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:400;padding:12px 16px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%}
+select:focus,input:focus,textarea:focus{border-color:#163422;box-shadow:0 0 0 3px rgba(22,52,34,0.07)}
+select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23163422' stroke-opacity='.35' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:44px}
+select option{background:#ffffff;color:#163422}
 textarea{resize:vertical;min-height:140px;line-height:1.7}
-input::placeholder,textarea::placeholder{color:rgba(240,237,230,0.2)}
+input::placeholder,textarea::placeholder{color:rgba(22,52,34,0.25)}
 
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .tags{display:flex;flex-wrap:wrap;gap:8px}
-.tag{padding:7px 16px;border:1px solid rgba(240,237,230,0.12);border-radius:2px;font-size:13px;color:rgba(240,237,230,0.45);cursor:pointer;transition:all .18s;user-select:none;background:transparent;letter-spacing:.04em}
-.tag:hover{border-color:rgba(200,169,110,0.4);color:#c8a96e}
-.tag.on{background:rgba(200,169,110,0.1);border-color:#c8a96e;color:#c8a96e}
-.tag.dim{opacity:.2;cursor:not-allowed;pointer-events:none}
-.tag.auto{background:rgba(200,169,110,0.08);border-color:rgba(200,169,110,0.4);color:#c8a96e}
+.tag{padding:7px 16px;border:1.5px solid rgba(22,52,34,0.1);border-radius:9999px;font-size:13px;color:rgba(22,52,34,0.45);cursor:pointer;transition:all .18s;user-select:none;background:#ffffff;letter-spacing:.01em;font-weight:500}
+.tag:hover{border-color:rgba(22,52,34,0.28);color:#163422;background:#f3f4f2}
+.tag:active{transform:scale(0.95)}
+.tag.on{background:rgba(22,52,34,0.07);border-color:#163422;color:#163422;font-weight:600}
+.tag.dim{opacity:.25;cursor:not-allowed;pointer-events:none}
+.tag.auto{background:rgba(200,235,208,0.35);border-color:rgba(22,52,34,0.2);color:#163422;font-weight:600}
 .tag.auto::after{content:'  ✓';font-size:10px;opacity:.7}
-.tag.sel-all{border-style:dashed;border-color:rgba(200,169,110,0.25);color:rgba(200,169,110,0.5)}
-.tag.sel-all:hover{border-color:#c8a96e;color:#c8a96e;border-style:solid}
+.tag.sel-all{border-style:dashed;border-color:rgba(22,52,34,0.18);color:rgba(22,52,34,0.4)}
+.tag.sel-all:hover{border-color:#163422;color:#163422;border-style:solid}
 
-.ctag{padding:7px 16px;border:1px solid rgba(240,237,230,0.12);border-radius:2px;font-size:11px;color:rgba(240,237,230,0.45);cursor:pointer;transition:all .18s;user-select:none;display:flex;align-items:center;gap:8px;background:transparent;letter-spacing:.04em}
-.ctag:hover{border-color:rgba(200,169,110,0.4);color:#c8a96e}
-.ctag.on{background:rgba(200,169,110,0.1);border-color:#c8a96e;color:#c8a96e}
-.ctag.dim{opacity:.2;cursor:not-allowed;pointer-events:none}
-.cdot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);flex-shrink:0}
+.ctag{padding:0;border:2.5px solid transparent;border-radius:14px;font-size:11px;cursor:pointer;transition:all .2s;user-select:none;overflow:hidden;display:flex;flex-direction:column;background:#ffffff;letter-spacing:.01em;font-weight:500;min-width:80px}
+.ctag:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.15)}
+.ctag:active{transform:scale(0.97)}
+.ctag.on{border-color:#163422;box-shadow:0 0 0 2px #163422}
+.ctag.dim{opacity:.25;cursor:not-allowed;pointer-events:none}
+.cdot{display:none}
+.ctag-swatch{width:100%;height:52px;display:block;flex-shrink:0}
+.ctag-name{padding:6px 8px;font-size:10px;color:#163422;background:#ffffff;text-align:center;line-height:1.3;font-family:'Plus Jakarta Sans',sans-serif}
 
 .div-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.div-card{border:1px solid rgba(240,237,230,0.1);border-radius:4px;padding:20px 18px;cursor:pointer;transition:all .2s;background:rgba(240,237,230,0.02)}
-.div-card:hover{border-color:rgba(200,169,110,0.35);background:rgba(200,169,110,0.04)}
-.div-card.on{background:rgba(200,169,110,0.08);border-color:#c8a96e}
-.div-card-lbl{font-size:13px;font-weight:500;color:#f0ede6;margin-bottom:6px}
-.div-card-sub{font-size:11px;color:rgba(240,237,230,0.35);line-height:1.5}
+.div-card{border:1px solid rgba(22,52,34,0.1);border-radius:16px;padding:20px 18px;cursor:pointer;transition:all .2s;background:#ffffff}
+.div-card:hover{border-color:rgba(22,52,34,0.22);background:#f3f4f2}
+.div-card.on{background:rgba(22,52,34,0.06);border-color:#163422}
+.div-card-lbl{font-size:13px;font-weight:700;color:#163422;margin-bottom:6px;font-family:'Plus Jakarta Sans',sans-serif}
+.div-card-sub{font-size:11px;color:#4c644e;line-height:1.5}
 
 .mood-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:8px}
-.mood-card{border:1px solid rgba(240,237,230,0.1);border-radius:4px;padding:13px 16px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:12px;background:rgba(240,237,230,0.02)}
-.mood-card:hover{border-color:rgba(200,169,110,0.35)}
-.mood-card.on{background:rgba(200,169,110,0.08);border-color:#c8a96e}
-.mood-icon{font-size:14px;color:#c8a96e;width:16px;text-align:center;flex-shrink:0}
-.mood-lbl{font-size:12px;color:rgba(240,237,230,0.7);letter-spacing:.03em}
+.mood-card{border:1px solid rgba(22,52,34,0.1);border-radius:16px;padding:13px 16px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:12px;background:#ffffff}
+.mood-card:hover{border-color:rgba(22,52,34,0.22);background:#f3f4f2}
+.mood-card.on{background:rgba(22,52,34,0.06);border-color:#163422}
+.mood-icon{font-size:14px;color:#4c644e;width:16px;text-align:center;flex-shrink:0}
+.mood-lbl{font-size:12px;color:#163422;letter-spacing:.01em;font-weight:500}
 
 .harm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.harm-card{border:1px solid rgba(240,237,230,0.1);border-radius:4px;padding:14px 16px;cursor:pointer;transition:all .18s;background:rgba(240,237,230,0.02)}
-.harm-card:hover{border-color:rgba(200,169,110,0.35)}
-.harm-card.on{background:rgba(200,169,110,0.08);border-color:#c8a96e}
-.harm-name{font-size:12px;font-weight:500;color:#f0ede6;margin-bottom:4px;letter-spacing:.03em}
-.harm-desc{font-size:11px;color:rgba(240,237,230,0.35);line-height:1.5}
+.harm-card{border:1px solid rgba(22,52,34,0.1);border-radius:16px;padding:14px 16px;cursor:pointer;transition:all .18s;background:#ffffff}
+.harm-card:hover{border-color:rgba(22,52,34,0.22);background:#f3f4f2}
+.harm-card.on{background:rgba(22,52,34,0.06);border-color:#163422}
+.harm-name{font-size:12px;font-weight:700;color:#163422;margin-bottom:4px;font-family:'Plus Jakarta Sans',sans-serif}
+.harm-desc{font-size:11px;color:#4c644e;line-height:1.5}
 
 .tgl-row{display:flex;align-items:center;gap:14px}
-.tgl{width:40px;height:22px;background:rgba(240,237,230,0.08);border:1px solid rgba(240,237,230,0.15);border-radius:11px;position:relative;cursor:pointer;transition:all .2s;flex-shrink:0}
-.tgl.on{background:rgba(200,169,110,0.3);border-color:#c8a96e}
-.tgl-k{width:16px;height:16px;background:rgba(240,237,230,0.4);border-radius:50%;position:absolute;top:2px;left:2px;transition:all .2s}
-.tgl.on .tgl-k{left:20px;background:#c8a96e}
-.tgl-lbl{font-size:12px;color:rgba(240,237,230,0.55);letter-spacing:.03em}
+.tgl{width:40px;height:22px;background:rgba(22,52,34,0.08);border:1px solid rgba(22,52,34,0.12);border-radius:11px;position:relative;cursor:pointer;transition:all .2s;flex-shrink:0}
+.tgl.on{background:rgba(22,52,34,0.22);border-color:#163422}
+.tgl-k{width:16px;height:16px;background:rgba(22,52,34,0.25);border-radius:50%;position:absolute;top:2px;left:2px;transition:all .2s}
+.tgl.on .tgl-k{left:20px;background:#163422}
+.tgl-lbl{font-size:12px;color:#4c644e;letter-spacing:.01em;font-weight:500}
 
-.hint-box{margin-top:10px;padding:12px 16px;background:rgba(200,169,110,0.06);border-radius:4px;border:1px solid rgba(200,169,110,0.15);font-size:12px;color:rgba(200,169,110,0.7);line-height:1.7}
-.info-box{padding:12px 16px;background:rgba(240,237,230,0.04);border-radius:4px;border:1px solid rgba(240,237,230,0.08);font-size:12px;color:rgba(240,237,230,0.45);line-height:1.7;margin-top:10px}
-.colour-hint{font-size:11px;color:rgba(200,169,110,0.6);margin-bottom:10px;line-height:1.6;padding:8px 14px;background:rgba(200,169,110,0.05);border-radius:4px;border:1px solid rgba(200,169,110,0.12)}
+.hint-box{margin-top:10px;padding:12px 16px;background:rgba(200,235,208,0.25);border-radius:12px;border:1px solid rgba(22,52,34,0.1);font-size:12px;color:#4c644e;line-height:1.7}
+.info-box{padding:12px 16px;background:#f3f4f2;border-radius:12px;border:1px solid rgba(22,52,34,0.07);font-size:12px;color:#4c644e;line-height:1.7;margin-top:10px}
+.colour-hint{font-size:11px;color:#4c644e;margin-bottom:10px;line-height:1.6;padding:8px 14px;background:rgba(200,235,208,0.2);border-radius:12px;border:1px solid rgba(22,52,34,0.07)}
 
 .radio-stack{display:flex;flex-direction:column;gap:8px}
-.r-card{border:1px solid rgba(240,237,230,0.1);border-radius:4px;padding:14px 18px;cursor:pointer;transition:all .18s;display:flex;align-items:flex-start;gap:14px;background:rgba(240,237,230,0.02)}
-.r-card:hover{border-color:rgba(200,169,110,0.35)}
-.r-card.on{background:rgba(200,169,110,0.08);border-color:#c8a96e}
-.r-dot{width:15px;height:15px;border-radius:50%;border:1.5px solid rgba(240,237,230,0.2);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.r-card.on .r-dot{border-color:#c8a96e}
-.r-inner{width:6px;height:6px;border-radius:50%;background:#c8a96e}
-.r-lbl{font-size:12px;font-weight:500;color:#f0ede6;margin-bottom:3px;letter-spacing:.03em}
-.r-sub{font-size:11px;color:rgba(240,237,230,0.35);line-height:1.5}
+.r-card{border:1px solid rgba(22,52,34,0.1);border-radius:16px;padding:14px 18px;cursor:pointer;transition:all .18s;display:flex;align-items:flex-start;gap:14px;background:#ffffff}
+.r-card:hover{border-color:rgba(22,52,34,0.22);background:#f3f4f2}
+.r-card.on{background:rgba(22,52,34,0.06);border-color:#163422}
+.r-dot{width:15px;height:15px;border-radius:50%;border:1.5px solid rgba(22,52,34,0.18);margin-top:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.r-card.on .r-dot{border-color:#163422}
+.r-inner{width:6px;height:6px;border-radius:50%;background:#163422}
+.r-lbl{font-size:12px;font-weight:700;color:#163422;margin-bottom:3px;font-family:'Plus Jakarta Sans',sans-serif}
+.r-sub{font-size:11px;color:#4c644e;line-height:1.5}
 
-.depth-note{font-size:11px;color:rgba(200,169,110,0.55);background:rgba(200,169,110,0.05);border:1px solid rgba(200,169,110,0.12);border-radius:4px;padding:10px 14px;margin-top:8px;line-height:1.7}
-.link-btn{font-size:11px;color:#c8a96e;cursor:pointer;text-decoration:underline;background:none;border:none;padding:0;font-family:inherit;letter-spacing:.03em}
-.link-btn:hover{color:#f0ede6}
+.depth-note{font-size:11px;color:#4c644e;background:rgba(200,235,208,0.2);border:1px solid rgba(22,52,34,0.08);border-radius:12px;padding:10px 14px;margin-top:8px;line-height:1.7}
+.link-btn{font-size:11px;color:#163422;cursor:pointer;text-decoration:underline;background:none;border:none;padding:0;font-family:inherit;font-weight:600}
+.link-btn:hover{color:#4c644e}
 
-.pt-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:4px}
-.pt-card{border:1px solid rgba(240,237,230,0.1);border-radius:4px;padding:24px 18px;cursor:pointer;transition:all .2s;text-align:center;background:rgba(240,237,230,0.02)}
-.pt-card:hover{border-color:rgba(200,169,110,0.35);background:rgba(200,169,110,0.04)}
-.pt-card.on{background:rgba(200,169,110,0.08);border-color:#c8a96e}
-.pt-icon{font-size:24px;margin-bottom:10px}
-.pt-label{font-size:13px;font-weight:500;color:#f0ede6;margin-bottom:5px;letter-spacing:.04em}
-.pt-sub{font-size:11px;color:rgba(240,237,230,0.35);line-height:1.4}
+.pt-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:4px}
+.pt-card{border:1.5px solid rgba(22,52,34,0.1);border-radius:20px;overflow:hidden;cursor:pointer;transition:all .25s;text-align:center;background:#ffffff;display:flex;flex-direction:column}
+.pt-card:hover{border-color:rgba(22,52,34,0.3);transform:translateY(-3px);box-shadow:0 12px 32px rgba(22,52,34,0.12)}
+.pt-card.on{border-color:#163422;box-shadow:0 0 0 2px #163422}
+.pt-img{width:100%;height:220px;object-fit:cover;display:block;transition:transform .4s ease}
+.pt-card:hover .pt-img{transform:scale(1.03)}
+.pt-body{padding:18px 16px 22px;flex:1}
+.pt-label{font-size:14px;font-weight:700;color:#163422;margin-bottom:6px;font-family:'Plus Jakarta Sans',sans-serif}
+.pt-sub{font-size:11px;color:#4c644e;line-height:1.5}
 
-.nav{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:24px;border-top:1px solid rgba(240,237,230,0.06)}
-.btn-back{background:transparent;border:1px solid rgba(240,237,230,0.15);border-radius:2px;color:rgba(240,237,230,0.4);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:11px 24px;transition:all .2s}
-.btn-back:hover{border-color:rgba(240,237,230,0.35);color:#f0ede6}
-.btn-next{background:#c8a96e;border:1px solid #c8a96e;border-radius:2px;color:#0f0f0f;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:12px 36px;transition:all .2s}
-.btn-next:hover{background:#d4b87c;border-color:#d4b87c}
-.btn-next:disabled{background:rgba(200,169,110,0.2);color:rgba(240,237,230,0.2);cursor:not-allowed;border-color:transparent}
-.btn-gen{background:#c8a96e;border:1px solid #c8a96e;border-radius:2px;color:#0f0f0f;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:14px 48px;transition:all .2s}
-.btn-gen:hover{background:#d4b87c}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:24px;border-top:1px solid rgba(22,52,34,0.06)}
+.btn-back{background:#ffffff;border:1px solid rgba(22,52,34,0.14);border-radius:9999px;color:rgba(22,52,34,0.45);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;padding:11px 28px;transition:all .2s}
+.btn-back:hover{border-color:rgba(22,52,34,0.3);color:#163422}
+.btn-next{background:linear-gradient(135deg,#163422,#2d4b37);border:none;border-radius:9999px;color:#ffffff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;padding:12px 36px;transition:all .2s;box-shadow:0 2px 8px rgba(22,52,34,0.2)}
+.btn-next:hover{opacity:.92;box-shadow:0 4px 16px rgba(22,52,34,0.28)}
+.btn-next:disabled{background:rgba(22,52,34,0.12);color:rgba(22,52,34,0.28);cursor:not-allowed;box-shadow:none}
+.btn-gen{background:linear-gradient(135deg,#163422,#2d4b37);border:none;border-radius:9999px;color:#ffffff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;padding:14px 48px;transition:all .2s;box-shadow:0 2px 8px rgba(22,52,34,0.2)}
+.btn-gen:hover{opacity:.92;box-shadow:0 4px 16px rgba(22,52,34,0.28)}
 
 .loading{text-align:center;padding:100px 20px}
-.loading-t{font-family:'Playfair Display',serif;font-size:30px;font-weight:400;color:#f0ede6;margin-bottom:10px}
-.loading-s{font-size:12px;color:rgba(240,237,230,0.35);margin-bottom:36px;letter-spacing:.06em}
+.loading-t{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400;font-style:italic;color:#163422;margin-bottom:10px;letter-spacing:-.01em}
+.loading-s{font-size:13px;color:#4c644e;margin-bottom:36px;letter-spacing:.02em}
 .spin{display:inline-flex;gap:8px}
-.spin span{width:6px;height:6px;background:#c8a96e;border-radius:50%;animation:blink 1.4s ease-in-out infinite}
+.spin span{width:7px;height:7px;background:#163422;border-radius:50%;animation:blink 1.4s ease-in-out infinite}
 .spin span:nth-child(2){animation-delay:.2s}.spin span:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,80%,100%{opacity:.2;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
+@keyframes blink{0%,80%,100%{opacity:.15;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
 
 .res-wrap{max-width:1200px;margin:0 auto;padding:48px 32px 100px}
-.res-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px;padding-bottom:32px;border-bottom:1px solid rgba(240,237,230,0.06)}
-.res-title{font-family:'Playfair Display',serif;font-size:42px;font-weight:400;color:#f0ede6;line-height:1.1}
-.res-meta{font-size:11px;color:rgba(200,169,110,0.55);margin-top:8px;letter-spacing:.06em;text-transform:uppercase}
-.res-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.res-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px;padding-bottom:32px;border-bottom:1px solid rgba(22,52,34,0.07)}
+.res-title{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:400;font-style:italic;color:#163422;line-height:1.05;letter-spacing:-.01em}
+.res-meta{font-size:11px;color:#4c644e;margin-top:8px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.res-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 
-.btn-reset{background:transparent;border:1px solid rgba(240,237,230,0.15);border-radius:2px;color:rgba(240,237,230,0.45);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;transition:all .2s}
-.btn-reset:hover{border-color:rgba(240,237,230,0.35);color:#f0ede6}
-.btn-action{background:transparent;border:1px solid rgba(200,169,110,0.3);border-radius:2px;color:#c8a96e;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;transition:all .2s}
-.btn-action:hover{background:rgba(200,169,110,0.08);border-color:#c8a96e}
-.btn-save{background:#c8a96e;border:1px solid #c8a96e;border-radius:2px;color:#0f0f0f;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;transition:all .2s}
-.btn-save:hover{background:#d4b87c}
-.btn-save:disabled{opacity:.4;cursor:not-allowed}
-.btn-pdf{background:#c8a96e;border:1px solid #c8a96e;border-radius:2px;color:#0f0f0f;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;transition:all .2s}
-.btn-pdf:hover{background:#d4b87c}
+.btn-reset{background:transparent;border:1px solid rgba(232,240,232,0.14);border-radius:6px;color:rgba(232,240,232,0.4);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:500;padding:8px 18px;transition:all .2s}
+.btn-reset:hover{border-color:rgba(232,240,232,0.32);color:rgba(232,240,232,0.75)}
+.btn-action{background:rgba(232,240,232,0.07);border:1px solid rgba(232,240,232,0.14);border-radius:6px;color:rgba(232,240,232,0.5);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:500;padding:8px 18px;transition:all .2s}
+.btn-action:hover{background:rgba(232,240,232,0.14);border-color:rgba(232,240,232,0.3);color:#e8f0e8}
+.btn-save{background:linear-gradient(135deg,#163422,#2d4b37);border:none;border-radius:9999px;color:#ffffff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;transition:all .2s;box-shadow:0 1px 6px rgba(22,52,34,0.18)}
+.btn-save:hover{opacity:.9}
+.btn-save:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn-pdf{background:linear-gradient(135deg,#163422,#2d4b37);border:none;border-radius:9999px;color:#ffffff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;transition:all .2s;box-shadow:0 1px 6px rgba(22,52,34,0.18)}
+.btn-pdf:hover{opacity:.9}
 
-.strat-box{background:rgba(200,169,110,0.05);border:1px solid rgba(200,169,110,0.15);border-left:2px solid #c8a96e;border-radius:2px;padding:22px 28px;margin-bottom:32px}
-.strat-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,110,0.5);margin-bottom:10px}
-.strat-txt{font-size:13px;line-height:1.8;color:rgba(240,237,230,0.7)}
-.feasibility-box{background:rgba(200,150,50,0.05);border:1px solid rgba(200,150,50,0.2);border-left:2px solid #c8781e;border-radius:2px;padding:18px 24px;margin-bottom:28px}
-.feasibility-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,150,50,0.6);margin-bottom:8px}
-.feasibility-txt{font-size:13px;line-height:1.8;color:rgba(200,150,50,0.8)}
+.strat-box{background:rgba(200,235,208,0.15);border:1px solid rgba(22,52,34,0.09);border-left:3px solid #163422;border-radius:16px;padding:22px 28px;margin-bottom:32px}
+.strat-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:10px;font-weight:600}
+.strat-txt{font-size:13px;line-height:1.8;color:#4c644e}
+.feasibility-box{background:rgba(255,248,235,0.8);border:1px solid rgba(180,120,30,0.18);border-left:3px solid #b87820;border-radius:16px;padding:18px 24px;margin-bottom:28px}
+.feasibility-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(160,100,20,0.65);margin-bottom:8px;font-weight:600}
+.feasibility-txt{font-size:13px;line-height:1.8;color:rgba(120,75,15,0.85)}
 
-.sec-banner{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:#f0ede6;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(240,237,230,0.06);display:flex;align-items:center;gap:14px;letter-spacing:.02em}
+.sec-banner{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;font-style:italic;color:#163422;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(22,52,34,0.07);display:flex;align-items:center;gap:14px;letter-spacing:-.01em}
 .cat-sec{margin-bottom:52px}
 .cat-hdr{display:flex;align-items:center;gap:14px;margin-bottom:20px}
-.cat-icon{font-size:16px;opacity:.7}
-.cat-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:400;color:#f0ede6;letter-spacing:.03em}
-.cat-cnt{font-size:10px;color:rgba(200,169,110,0.55);background:rgba(200,169,110,0.08);border:1px solid rgba(200,169,110,0.15);border-radius:2px;padding:2px 10px;letter-spacing:.08em}
+.cat-icon{font-size:16px;opacity:.8}
+.cat-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;font-style:italic;color:#163422;letter-spacing:-.01em}
+.cat-cnt{font-size:10px;color:#4c644e;background:rgba(200,235,208,0.35);border:1px solid rgba(22,52,34,0.1);border-radius:9999px;padding:3px 12px;letter-spacing:.05em;font-weight:600}
 
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:rgba(240,237,230,0.06)}
-.pc{background:#0f0f0f;padding:22px;transition:background .2s}
-.pc:hover{background:#141414}
-.pc-common{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;color:#f0ede6;margin-bottom:3px;letter-spacing:.02em}
-.pc-sci{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:rgba(200,169,110,0.5);margin-bottom:14px;letter-spacing:.04em}
-.pc-attrs{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-bottom:14px;background:rgba(240,237,230,0.06)}
-.pa{background:#0f0f0f;padding:8px 10px}
-.pa-k{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,237,230,0.25);margin-bottom:3px}
-.pa-v{font-size:12px;color:rgba(240,237,230,0.7)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;background:transparent}
+.pc{background:#ffffff;padding:22px;transition:all .2s;border-radius:20px;border:1px solid rgba(22,52,34,0.08)}
+.pc:hover{border-color:rgba(22,52,34,0.16);box-shadow:0 4px 20px rgba(22,52,34,0.07)}
+.pc-common{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;font-style:italic;color:#163422;margin-bottom:3px;letter-spacing:-.01em}
+.pc-sci{font-style:italic;font-size:11px;color:#99baa1;margin-bottom:14px;font-weight:400}
+.pc-attrs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pa{background:#f3f4f2;padding:9px 11px;border-radius:10px}
+.pa-k{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:3px;font-weight:600}
+.pa-v{font-size:12px;color:#163422;font-weight:500}
 .pbadges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.bp{font-size:9px;padding:3px 8px;border-radius:1px;letter-spacing:.06em;text-transform:uppercase}
-.bp-g{background:rgba(100,160,80,0.12);color:rgba(120,180,90,0.8);border:1px solid rgba(100,160,80,0.2)}
-.bp-a{background:rgba(200,150,50,0.1);color:rgba(200,160,80,0.8);border:1px solid rgba(200,150,50,0.2)}
-.bp-b{background:rgba(80,130,200,0.1);color:rgba(100,150,200,0.8);border:1px solid rgba(80,130,200,0.2)}
-.bp-p{background:rgba(150,80,200,0.1);color:rgba(160,100,200,0.8);border:1px solid rgba(150,80,200,0.2)}
-.bp-t{background:rgba(50,160,120,0.1);color:rgba(70,170,130,0.8);border:1px solid rgba(50,160,120,0.2)}
-.pnote{font-size:11px;color:rgba(240,237,230,0.3);line-height:1.6;border-top:1px solid rgba(240,237,230,0.06);padding-top:10px;font-style:italic}
+.bp{font-size:9px;padding:3px 10px;border-radius:9999px;letter-spacing:.04em;text-transform:uppercase;font-weight:700}
+.bp-g{background:rgba(200,235,208,0.5);color:#163422;border:1px solid rgba(22,52,34,0.1)}
+.bp-a{background:rgba(255,243,215,0.7);color:#7a4f0a;border:1px solid rgba(180,120,30,0.18)}
+.bp-b{background:rgba(210,225,250,0.6);color:#1a3870;border:1px solid rgba(50,90,190,0.14)}
+.bp-p{background:rgba(235,215,250,0.6);color:#4a1870;border:1px solid rgba(120,50,190,0.14)}
+.bp-t{background:rgba(200,245,225,0.55);color:#0a4228;border:1px solid rgba(20,130,80,0.14)}
+.pnote{font-size:11px;color:#4c644e;line-height:1.6;border-top:1px solid rgba(22,52,34,0.06);padding-top:10px;font-style:italic;opacity:.8}
 
 .tbl-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
-.tbl-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:#f0ede6}
-.tbl-wrap{overflow-x:auto;border:1px solid rgba(240,237,230,0.08)}
+.tbl-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;font-style:italic;color:#163422;letter-spacing:-.01em}
+.tbl-wrap{overflow-x:auto;border:1px solid rgba(22,52,34,0.08);border-radius:16px;overflow:hidden}
 table{width:100%;border-collapse:collapse;font-size:11px;min-width:920px}
-thead{background:rgba(240,237,230,0.03)}
-th{padding:11px 13px;text-align:left;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,169,110,0.5);font-weight:500;border-bottom:1px solid rgba(240,237,230,0.08);white-space:nowrap}
-td{padding:10px 13px;color:rgba(240,237,230,0.65);border-bottom:1px solid rgba(240,237,230,0.04);vertical-align:top;line-height:1.5}
+thead{background:#f3f4f2}
+th{padding:11px 13px;text-align:left;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(22,52,34,0.4);font-weight:700;border-bottom:1px solid rgba(22,52,34,0.06);white-space:nowrap}
+td{padding:10px 13px;color:#4c644e;border-bottom:1px solid rgba(22,52,34,0.04);vertical-align:top;line-height:1.5}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(240,237,230,0.02)}
-.td-sci{font-style:italic;color:rgba(200,169,110,0.45)}
-.td-cat-hdr td{background:rgba(200,169,110,0.05);color:#c8a96e;font-weight:500;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border-top:1px solid rgba(200,169,110,0.15);border-bottom:1px solid rgba(200,169,110,0.1);padding:8px 13px}
+tr:hover td{background:rgba(22,52,34,0.015)}
+.td-sci{font-style:italic;color:#99baa1}
+.td-cat-hdr td{background:rgba(200,235,208,0.2);color:#163422;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-top:1px solid rgba(22,52,34,0.06);border-bottom:1px solid rgba(22,52,34,0.06);padding:8px 13px}
 .td-traits{display:flex;flex-wrap:wrap;gap:4px}
-.td-t{font-size:8px;padding:2px 7px;border-radius:1px;background:rgba(240,237,230,0.05);color:rgba(240,237,230,0.4);border:1px solid rgba(240,237,230,0.08);white-space:nowrap;letter-spacing:.05em;text-transform:uppercase}
+.td-t{font-size:8px;padding:2px 8px;border-radius:9999px;background:rgba(200,235,208,0.35);color:#163422;border:1px solid rgba(22,52,34,0.08);white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;font-weight:700}
 
 .hd-section{margin-bottom:40px}
-.hd-sec-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:#f0ede6;margin-bottom:16px;display:flex;align-items:center;gap:10px;letter-spacing:.03em}
-.hd-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:rgba(240,237,230,0.06)}
-.hd-card{background:#0f0f0f;padding:20px;transition:background .2s}
-.hd-card:hover{background:#141414}
-.hd-card-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;color:#f0ede6;margin-bottom:3px;letter-spacing:.03em}
-.hd-card-sub{font-size:11px;color:rgba(200,169,110,0.45);margin-bottom:14px;font-style:italic;letter-spacing:.03em}
-.hd-attrs{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-bottom:12px;background:rgba(240,237,230,0.06)}
-.hd-attr{background:#0f0f0f;padding:7px 10px}
-.hd-attr-k{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,237,230,0.25);margin-bottom:2px}
-.hd-attr-v{font-size:12px;color:rgba(240,237,230,0.65)}
-.hd-note{font-size:11px;color:rgba(240,237,230,0.3);line-height:1.6;border-top:1px solid rgba(240,237,230,0.06);padding-top:10px;font-style:italic}
+.hd-sec-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;font-style:italic;color:#163422;margin-bottom:16px;display:flex;align-items:center;gap:10px;letter-spacing:-.01em}
+.hd-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;background:transparent}
+.hd-card{background:#ffffff;padding:20px;transition:all .2s;border-radius:20px;border:1px solid rgba(22,52,34,0.08)}
+.hd-card:hover{border-color:rgba(22,52,34,0.16);box-shadow:0 4px 20px rgba(22,52,34,0.07)}
+.hd-card-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;font-style:italic;color:#163422;margin-bottom:3px;letter-spacing:-.01em}
+.hd-card-sub{font-size:11px;color:#99baa1;margin-bottom:14px;font-style:italic;font-weight:400}
+.hd-attrs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.hd-attr{background:#f3f4f2;padding:8px 10px;border-radius:10px}
+.hd-attr-k{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:2px;font-weight:600}
+.hd-attr-v{font-size:12px;color:#163422;font-weight:500}
+.hd-note{font-size:11px;color:#4c644e;line-height:1.6;border-top:1px solid rgba(22,52,34,0.06);padding-top:10px;font-style:italic;opacity:.8}
 
-.alt-sec{margin-top:40px;background:rgba(240,237,230,0.02);border:1px solid rgba(240,237,230,0.06);padding:28px}
-.alt-title{font-family:'Playfair Display',serif;font-size:20px;color:#f0ede6;margin-bottom:18px;font-weight:400;letter-spacing:.03em}
-.alt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:rgba(240,237,230,0.06)}
-.alt-item{background:#0f0f0f;padding:14px}
-.alt-c{font-family:'Playfair Display',serif;font-size:14px;color:#f0ede6;margin-bottom:2px}
-.alt-s{font-family:'Playfair Display',serif;font-style:italic;font-size:10px;color:rgba(200,169,110,0.45);margin-bottom:5px}
-.alt-r{font-size:11px;color:rgba(240,237,230,0.35);line-height:1.5}
+.alt-sec{margin-top:40px;background:#f3f4f2;border:1px solid rgba(22,52,34,0.06);padding:28px;border-radius:20px}
+.alt-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:#163422;margin-bottom:18px;font-weight:400;font-style:italic;letter-spacing:-.01em}
+.alt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.alt-item{background:#ffffff;padding:14px;border-radius:12px;border:1px solid rgba(22,52,34,0.06)}
+.alt-c{font-family:'Cormorant Garamond',serif;font-size:16px;color:#163422;margin-bottom:2px;font-weight:500;font-style:italic}
+.alt-s{font-style:italic;font-size:10px;color:#99baa1;margin-bottom:5px}
+.alt-r{font-size:11px;color:#4c644e;line-height:1.5}
 
-.divider{border:none;border-top:1px solid rgba(240,237,230,0.06);margin:40px 0}
-.err{background:rgba(200,60,60,0.08);border:1px solid rgba(200,60,60,0.2);border-radius:2px;color:rgba(220,120,100,0.9);font-size:12px;padding:14px 18px;margin-top:14px;line-height:1.6}
+.divider{border:none;border-top:1px solid rgba(22,52,34,0.06);margin:40px 0}
+.err{background:rgba(220,40,40,0.04);border:1px solid rgba(220,40,40,0.14);border-radius:12px;color:rgba(170,25,25,0.8);font-size:12px;padding:14px 18px;margin-top:14px;line-height:1.6}
+
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── Page enter ── */
+@keyframes appIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.app{animation:appIn .35s ease-out}
+
+/* ── Step fade ── */
+@keyframes stepIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes stepOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-8px)}}
+.step-visible{animation:stepIn .22s ease-out forwards}
+.step-hidden{animation:stepOut .15s ease-in forwards;pointer-events:none}
+
+/* ── Dot progress ── */
+.step-dots{display:flex;gap:7px;align-items:center;padding:0 56px 36px;margin-top:-12px}
+.step-dot{width:6px;height:6px;border-radius:9999px;background:rgba(22,52,34,0.1);transition:all .3s ease;flex-shrink:0}
+.step-dot.active{width:22px;background:#163422}
+.step-dot.done{background:rgba(22,52,34,0.3)}
+@media(max-width:900px){.step-dots{padding:0 24px 28px}}
+
+/* ── Toast ── */
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(6px)}}
+.toast{position:fixed;bottom:28px;right:28px;background:#163422;color:#c8ebd0;padding:14px 22px;border-radius:14px;font-size:13px;font-weight:500;z-index:300;box-shadow:0 8px 32px rgba(22,52,34,0.3);display:flex;align-items:center;gap:10px;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.01em;animation:toastIn .25s ease-out}
+.toast-icon{width:20px;height:20px;background:rgba(200,235,208,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+
+/* ── Btn spinner ── */
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-spinner{width:13px;height:13px;border:2px solid rgba(200,235,208,0.25);border-top-color:rgba(200,235,208,0.8);border-radius:50%;animation:spin .75s linear infinite;display:inline-block;vertical-align:middle;margin-right:4px}
+
+/* ── Mobile nav ── */
+.hdr-mobile-menu{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hdr-mobile-menu span{width:20px;height:1.5px;background:rgba(232,240,232,0.6);border-radius:2px;display:block;transition:all .2s}
+.mobile-dropdown{display:none;position:absolute;top:100%;right:0;background:#163422;border:1px solid rgba(200,235,208,0.1);border-radius:12px;padding:8px;min-width:160px;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:99;margin-top:6px}
+.mobile-dropdown button{display:block;width:100%;padding:10px 16px;background:none;border:none;color:rgba(232,240,232,0.65);font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;cursor:pointer;text-align:left;border-radius:8px;transition:background .15s}
+.mobile-dropdown button:hover{background:rgba(200,235,208,0.08);color:#e8f0e8}
+.hdr-nav-wrap{display:flex;align-items:center;gap:10px;position:relative}
 
 @media(max-width:600px){
-  .hdr{padding:16px 20px}.prog{padding:0 20px}.main,.res-wrap{padding:32px 16px 60px}
+  .hdr{padding:14px 20px}.main,.res-wrap{padding:32px 16px 60px}
   .g2,.div-cards,.harm-grid,.pt-grid{grid-template-columns:1fr}.mood-grid{grid-template-columns:1fr 1fr}
-  .cards,.hd-cards,.alt-grid{grid-template-columns:1fr}.res-title{font-size:30px}.stp-title{font-size:32px}
+  .cards,.hd-cards,.alt-grid{grid-template-columns:1fr}.res-title{font-size:30px}.stp-title{font-size:36px}
+  .hdr-btns{display:none}
+  .hdr-mobile-menu{display:flex}
+  .stp-title{font-size:38px}
 }`;
 
 const togArr=(a,v)=>a.includes(v)?a.filter(x=>x!==v):[...a,v];
@@ -523,16 +583,16 @@ function usePlantImage(scientificName) {
 function AltCard({ alt, onSelect }) {
   const imgUrl = usePlantImage(alt.scientificName || alt.commonName);
   return (
-    <div style={{background:'#1a1a1a',border:'1px solid rgba(240,237,230,0.08)',marginBottom:'1px',overflow:'hidden'}}>
+    <div style={{background:'#ffffff',border:'1px solid rgba(22,52,34,0.08)',borderRadius:'16px',marginBottom:'10px',overflow:'hidden'}}>
       {imgUrl
         ? <img src={imgUrl} alt={alt.commonName} style={{width:'100%',height:'140px',objectFit:'cover',objectPosition:'center',display:'block'}}/>
-        : <div style={{width:'100%',height:'80px',background:'rgba(200,169,110,0.05)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'22px'}}>🌿</div>
+        : <div style={{width:'100%',height:'140px',background:'linear-gradient(135deg,#e8f4e8,#f3f7f0)'}}></div>
       }
       <div style={{padding:'14px'}}>
-        <div style={{fontFamily:'Playfair Display,serif',fontSize:'16px',color:'#f0ede6',marginBottom:2,letterSpacing:'.02em'}}>{alt.commonName}</div>
-        {alt.scientificName&&<div style={{fontFamily:'Playfair Display,serif',fontStyle:'italic',fontSize:'11px',color:'rgba(200,169,110,0.5)',marginBottom:8}}>{alt.scientificName}</div>}
-        <div style={{fontSize:'11px',color:'rgba(240,237,230,0.35)',marginBottom:12,lineHeight:1.6}}>{alt.reason}</div>
-        <button onClick={onSelect} style={{width:'100%',padding:'9px',border:'none',background:'#c8a96e',color:'#0f0f0f',fontSize:'10px',cursor:'pointer',fontFamily:'DM Sans,sans-serif',letterSpacing:'.1em',textTransform:'uppercase',fontWeight:500}}>
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'15px',fontWeight:700,color:'#163422',marginBottom:2,letterSpacing:'-.01em'}}>{alt.commonName}</div>
+        {alt.scientificName&&<div style={{fontStyle:'italic',fontSize:'11px',color:'#99baa1',marginBottom:8}}>{alt.scientificName}</div>}
+        <div style={{fontSize:'11px',color:'#4c644e',marginBottom:12,lineHeight:1.7}}>{alt.reason}</div>
+        <button onClick={onSelect} style={{width:'100%',padding:'10px',border:'none',background:'linear-gradient(135deg,#163422,#2d4b37)',color:'#ffffff',fontSize:'11px',cursor:'pointer',fontFamily:"'Plus Jakarta Sans',sans-serif",letterSpacing:'.06em',textTransform:'uppercase',fontWeight:700,borderRadius:'9999px'}}>
           Use this plant
         </button>
       </div>
@@ -544,20 +604,20 @@ function PlantCard({p, onRemove, onReplace}){
   const imgUrl = usePlantImage(p.scientificName);
   if (p.loading) return (
     <div className="pc" style={{display:'flex',flexDirection:'column',gap:10}}>
-      <div style={{width:'100%',height:'160px',background:'linear-gradient(90deg,rgba(200,169,110,0.05) 25%,rgba(200,169,110,0.1) 50%,rgba(200,169,110,0.05) 75%)',backgroundSize:'200% 100%',animation:'shimmer 1.5s infinite'}}/>
-      <div style={{height:16,width:'55%',background:'rgba(240,237,230,0.06)'}}/>
-      <div style={{height:11,width:'38%',background:'rgba(240,237,230,0.04)'}}/>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:1,background:'rgba(240,237,230,0.06)'}}>
-        {[1,2,3,4].map(i=><div key={i} style={{height:36,background:'#0f0f0f'}}/>)}
+      <div style={{width:'100%',height:'160px',background:'linear-gradient(90deg,rgba(22,52,34,0.04) 25%,rgba(22,52,34,0.08) 50%,rgba(22,52,34,0.04) 75%)',backgroundSize:'200% 100%',animation:'shimmer 1.5s infinite',borderRadius:'8px'}}/>
+      <div style={{height:16,width:'55%',background:'rgba(22,52,34,0.06)',borderRadius:'6px'}}/>
+      <div style={{height:11,width:'38%',background:'rgba(22,52,34,0.04)',borderRadius:'6px'}}/>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+        {[1,2,3,4].map(i=><div key={i} style={{height:36,background:'#f3f4f2',borderRadius:'8px'}}/>)}
       </div>
-      <p style={{fontSize:10,color:'rgba(200,169,110,0.4)',textAlign:'center',letterSpacing:'.1em',textTransform:'uppercase'}}>Fetching plant data…</p>
+      <p style={{fontSize:10,color:'rgba(22,52,34,0.3)',textAlign:'center',letterSpacing:'.08em',textTransform:'uppercase',fontFamily:"'Plus Jakarta Sans',sans-serif"}}>Fetching plant data…</p>
     </div>
   );
   return(
     <div className="pc">
       {imgUrl
-        ? <img src={imgUrl} alt={p.commonName} style={{width:'100%',height:'160px',objectFit:'cover',borderRadius:'6px',marginBottom:'12px'}}/>
-        : <div style={{width:'100%',height:'100px',background:'#e8f4d8',borderRadius:'6px',marginBottom:'12px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'28px'}}>{CAT_ICONS[p.category]||'🌿'}</div>
+        ? <img src={imgUrl} alt={p.commonName} style={{width:'100%',height:'180px',objectFit:'cover',objectPosition:'center',borderRadius:'10px',marginBottom:'14px',display:'block'}}/>
+        : <div style={{width:'100%',height:'180px',background:'linear-gradient(135deg,#e8f4e8,#f3f7f0)',borderRadius:'10px',marginBottom:'14px'}}></div>
       }
       <div className="pc-common">{p.commonName}</div>
       {p.scientificName&&<div className="pc-sci">{p.scientificName}</div>}
@@ -586,9 +646,9 @@ function PlantCard({p, onRemove, onReplace}){
       </div>
       {p.note&&<div className="pnote">{p.note}</div>}
       {(onRemove||onReplace)&&(
-        <div style={{display:'flex',gap:6,marginTop:12,paddingTop:12,borderTop:'1px solid rgba(240,237,230,0.06)'}}>
-          {onReplace&&<button onClick={onReplace} style={{flex:1,padding:'7px',border:'1px solid rgba(200,169,110,0.25)',background:'transparent',color:'#c8a96e',fontSize:'10px',cursor:'pointer',fontFamily:'DM Sans,sans-serif',letterSpacing:'.08em',textTransform:'uppercase'}}>↔ Replace</button>}
-          {onRemove&&<button onClick={onRemove} style={{padding:'7px 12px',border:'1px solid rgba(200,80,80,0.2)',background:'transparent',color:'rgba(200,100,80,0.7)',fontSize:'10px',cursor:'pointer',fontFamily:'DM Sans,sans-serif'}}>✕</button>}
+        <div style={{display:'flex',gap:6,marginTop:12,paddingTop:12,borderTop:'1px solid rgba(22,52,34,0.06)'}}>
+          {onReplace&&<button onClick={onReplace} style={{flex:1,padding:'8px',border:'1px solid rgba(22,52,34,0.15)',background:'#f3f4f2',color:'#163422',fontSize:'11px',cursor:'pointer',fontFamily:"'Plus Jakarta Sans',sans-serif",letterSpacing:'.04em',textTransform:'uppercase',fontWeight:600,borderRadius:'9999px',transition:'all .18s'}}>↔ Replace</button>}
+          {onRemove&&<button onClick={onRemove} style={{padding:'8px 14px',border:'1px solid rgba(200,60,60,0.15)',background:'rgba(200,60,60,0.04)',color:'rgba(180,40,40,0.6)',fontSize:'11px',cursor:'pointer',fontFamily:"'Plus Jakarta Sans',sans-serif",borderRadius:'9999px',transition:'all .18s'}}>✕</button>}
         </div>
       )}
     </div>
@@ -603,7 +663,7 @@ function SpecTable({rows,meta}){
     const tbl=document.querySelector('.tbl-wrap');
     if(!tbl)return;
     const win=window.open('','_blank');
-    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Land AI — Specification Table</title><style>
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>LandPal. — Specification Table</title><style>
       *{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:11px;color:#252e1e;background:#fff;padding:12mm}
       h1{font-size:18px;font-weight:300;margin-bottom:4px;font-family:Georgia,serif;color:#2a3a18}
       .meta{font-size:10px;color:#7a9a50;margin-bottom:14px}
@@ -616,7 +676,7 @@ function SpecTable({rows,meta}){
       .trait{font-size:8px;padding:1px 5px;border-radius:5px;background:#e4f0d4;color:#4a6030;border:1px solid #c0d4a0;white-space:nowrap}
       @page{size:A3 landscape;margin:15mm}
     </style></head><body>`);
-    win.document.write(`<h1>Landscape Specification Table — Land AI</h1><div class="meta">${meta||''}</div>`);
+    win.document.write(`<h1>Landscape Specification Table — LandPal.</h1><div class="meta">${meta||''}</div>`);
     win.document.write(tbl.outerHTML);
     win.document.write('</body></html>');
     win.document.close();win.focus();
@@ -637,8 +697,8 @@ function SpecTable({rows,meta}){
                 <tr className="td-cat-hdr"><td colSpan={14}>{CAT_ICONS[group.name]||"🌿"}&nbsp; {group.name} — {group.plants.length} species</td></tr>
                 {group.plants.map((r,j)=>{n++;const num=n;return(
                   <tr key={group.name+j}>
-                    <td style={{color:"#8aaa60",fontWeight:500}}>{num}</td>
-                    <td style={{fontWeight:500,color:"#2a3a18"}}>{r.commonName}</td>
+                    <td style={{color:"#4c644e",fontWeight:600}}>{num}</td>
+                    <td style={{fontWeight:600,color:"#163422"}}>{r.commonName}</td>
                     <td className="td-sci">{r.scientificName||"—"}</td>
                     <td>{r.maxHeight||"—"}</td><td>{r.controllableHeight||"—"}</td>
                     <td>{r.spread||"—"}</td><td>{r.rootDepth||"—"}</td>
@@ -658,7 +718,7 @@ function SpecTable({rows,meta}){
   );
 }
 
-export default function App({ session }){
+export default function App({ session, onGoHome }){
   const[step,setStep]=useState(0);
   const[loading,setLoading]=useState(false);
   const[result,setResult]=useState(null);
@@ -669,12 +729,27 @@ export default function App({ session }){
   const[isSaved,setIsSaved]=useState(false);
   const [generatingBrief, setGeneratingBrief] = useState(false)
   const[replacingPlant,setReplacingPlant]=useState(null);
+  const[stepVisible,setStepVisible]=useState(true);
+  const[toast,setToast]=useState(null);
+  const[isGenerating,setIsGenerating]=useState(false);
+  const[mobileMenuOpen,setMobileMenuOpen]=useState(false);
   const topRef=useRef(null);
+
+  const showToast=(msg,icon='✓')=>{setToast({msg,icon});setTimeout(()=>setToast(null),3200);};
+
+  const goToStep=(n)=>{
+    setStepVisible(false);
+    setTimeout(()=>{
+      setStep(n);
+      setStepVisible(true);
+      topRef.current?.scrollIntoView({behavior:'smooth'});
+    },160);
+  };
 
   const[form,setForm]=useState({
     country:"",region:"",
     projectType:"",diversity:"moderate",
-    paletteType:"",
+    paletteType:"softscape",
     hasBasement:false,basementSlabDepth:"",
     hasRaisedPlanters:false,raisedPlanterHeight:"",planterHeightAiSuggest:false,
     rooftopType:"",rooftopSlabDepth:"",rooftopPlanterHeight:"",rooftopContainerSize:"",
@@ -877,7 +952,7 @@ export default function App({ session }){
       return { ...prev, categories: updatedCategories, specTable: rebuildSpecTable(updatedCategories) }
     })
   } catch (e) {
-    alert('Could not fetch plant details. Please try again.')
+    setError('Could not fetch plant details. Please try again.')
   }
   setIsSaved(false)
 }
@@ -909,12 +984,13 @@ export default function App({ session }){
       return { ...prev, categories: updatedCategories, specTable: rebuildSpecTable(updatedCategories) }
     })
   } catch (e) {
-    alert('Could not fetch plant details. Please try again.')
+    setError('Could not fetch plant details. Please try again.')
   }
   setIsSaved(false)
 }
   const autoGenerateBrief = async () => {
   setGeneratingBrief(true)
+  setError(null)
   try {
     const prompt = `You are a senior landscape architect. Based on the following project parameters, write a concise professional design brief of 3-5 sentences that summarises the project intent, key design priorities, and any important constraints. Write it as if you are the designer briefing a colleague.
 
@@ -936,10 +1012,14 @@ Write only the brief text, no headings or labels.`
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt })
     })
-    const data = await res.json()
+
+    let data
+    try { data = await res.json() } catch { throw new Error('Server returned an invalid response. Is the local API server running on port 3001?') }
+    if (!res.ok) throw new Error(data?.error || `Server error ${res.status}`)
     if (data.text) set('brief', data.text.trim())
+    else throw new Error('No text returned from API')
   } catch (e) {
-    console.error(e)
+    setError('Auto-generate failed: ' + e.message)
   } finally {
     setGeneratingBrief(false)
   }
@@ -951,8 +1031,9 @@ Write only the brief text, no headings or labels.`
       const title = [form.country, form.region, form.projectType].filter(Boolean).join(' · ');
       await savePalette(session.user.id, title, form, editableResult);
       setIsSaved(true);
+      showToast('Palette saved successfully');
     } catch (e) {
-      alert('Error: ' + JSON.stringify(e));
+      setError('Could not save palette. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -966,7 +1047,9 @@ Write only the brief text, no headings or labels.`
   };
 
   const generate=async()=>{
-    setLoading(true);setError(null);setResult(null);setEditableResult(null);
+    setIsGenerating(true);
+    await new Promise(r=>setTimeout(r,200));
+    setLoading(true);setError(null);setResult(null);setEditableResult(null);setIsGenerating(false);
     topRef.current?.scrollIntoView({behavior:"smooth"});
     try{
       let combined={};
@@ -1001,7 +1084,6 @@ Write only the brief text, no headings or labels.`
   const stepMap={
     "location":()=>(
       <>
-        <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
         <div className="stp-title">Where is<br/><em>the project?</em></div>
         <div className="stp-desc">Climate, soil conditions, and rainfall are the foundation of any correct landscape selection.</div>
         <div className="sect">
@@ -1028,7 +1110,6 @@ Write only the brief text, no headings or labels.`
 
     "project":()=>(
       <>
-        <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
         <div className="stp-title">Project <em>setup</em></div>
         <div className="stp-desc">Define the project type, the scale of the palette, and any structural constraints on planting.</div>
         <div className="sect">
@@ -1098,20 +1179,21 @@ Write only the brief text, no headings or labels.`
 
     "palette-type":()=>(
       <>
-        <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
         <div className="stp-title">What would you<br/><em>like to generate?</em></div>
         <div className="stp-desc">Choose whether you want a softscape palette (plants), a hardscape palette (materials and paving), or a complete landscape palette with both.</div>
         <div className="sect">
           <div className="pt-grid">
             {[
-              {val:"softscape",icon:"🌿",label:"Softscape",sub:"Plant palette — species selection, bloom, root depth, water needs, conditions"},
-              {val:"hardscape",icon:"🪨",label:"Hardscape",sub:"Material palette — paving, stone, tiles, finishes, patterns, zones"},
-              {val:"both",icon:"🌿🪨",label:"Both",sub:"Complete landscape palette — full softscape and hardscape together"},
+              {val:"softscape",img:imgSoftscape,label:"Softscape",sub:"Plant palette — species selection, bloom, root depth, water needs, conditions"},
+              {val:"hardscape",img:imgHardscape,label:"Hardscape",sub:"Material palette — paving, stone, tiles, finishes, patterns, zones"},
+              {val:"both",img:imgBoth,label:"Both",sub:"Complete landscape palette — full softscape and hardscape together"},
             ].map(opt=>(
               <div key={opt.val} className={`pt-card ${form.paletteType===opt.val?"on":""}`} onClick={()=>set("paletteType",opt.val)}>
-                <div className="pt-icon">{opt.icon}</div>
-                <div className="pt-label">{opt.label}</div>
-                <div className="pt-sub">{opt.sub}</div>
+                <img src={opt.img} alt={opt.label} className="pt-img"/>
+                <div className="pt-body">
+                  <div className="pt-label">{opt.label}</div>
+                  <div className="pt-sub">{opt.sub}</div>
+                </div>
               </div>
             ))}
           </div>
@@ -1128,12 +1210,11 @@ Write only the brief text, no headings or labels.`
 
     "style":()=>(
       <>
-        <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
         <div className="stp-title">Planting <em>style</em></div>
         <div className="stp-desc">Select a primary style — compatible styles stay available, incompatible ones dim.</div>
         <div className="sect">
           <div className="sl">Select Style(s)</div>
-          {form.styles.length>0&&<div style={{fontSize:11,color:"#5a8040",marginBottom:10,lineHeight:1.6}}>Active: <strong style={{color:"#3a6020"}}>{form.styles.join(", ")}</strong> <button className="link-btn" style={{marginLeft:8}} onClick={()=>set("styles",[])}>Clear all</button></div>}
+          {form.styles.length>0&&<div style={{fontSize:11,color:"#4c644e",marginBottom:10,lineHeight:1.6}}>Active: <strong style={{color:"#163422"}}>{form.styles.join(", ")}</strong> <button className="link-btn" style={{marginLeft:8}} onClick={()=>set("styles",[])}>Clear all</button></div>}
           <div className="tags">{STYLES.map(s=>{const st=styleState(s);return <div key={s} className={`tag ${st==="on"?"on":""} ${st==="dim"?"dim":""}`} onClick={()=>st!=="dim"&&tog("styles",s)} title={st==="dim"?"Not compatible with current selection":""}>{s}</div>;})}</div>
         </div>
       </>
@@ -1141,7 +1222,6 @@ Write only the brief text, no headings or labels.`
 
     "plants":()=>(
       <>
-        <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
         <div className="stp-title">Plant <em>categories</em></div>
         <div className="stp-desc">Select the categories you need. Leave blank and AI will suggest an appropriate mix.</div>
         <div className="sect">
@@ -1167,15 +1247,14 @@ Write only the brief text, no headings or labels.`
       };
       return(
         <>
-          <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
-          <div className="stp-title">Colour, mood &<br/><em>seasonality</em></div>
+            <div className="stp-title">Colour, mood &<br/><em>seasonality</em></div>
           <div className="stp-desc">Set harmony and mood first — this filters the colour picker to only show what works together.</div>
           <div className="sect"><div className="sl">1 — Colour Harmony</div><div className="harm-grid">{HARMONIES.map(h=><div key={h.val} className={`harm-card ${form.harmony===h.val?"on":""}`} onClick={()=>setHarmony(h.val)}><div className="harm-name">{h.label}</div><div className="harm-desc">{h.desc}</div></div>)}</div></div>
           <div className="sect"><div className="sl">2 — Mood / Atmosphere</div><div className="mood-grid">{MOODS.map(m=><div key={m.val} className={`mood-card ${form.mood===m.val?"on":""}`} onClick={()=>set("mood",m.val)}><span className="mood-icon">{m.icon}</span><span className="mood-lbl">{m.label}</span></div>)}</div></div>
           <div className="sect">
             <div className="sl">3 — Colours</div>
             {form.harmony&&<div className="colour-hint">{hints[form.harmony]}</div>}
-            <div className="tags" style={{marginTop:4}}>{ALL_COLORS_ORDER.map(c=>{const avail=availSet.includes(c),on=form.colors.includes(c);return <div key={c} className={`ctag ${on?"on":""} ${!avail?"dim":""}`} onClick={()=>avail&&toggleColor(c)}><ColorDot c={c}/>{c}</div>;})}</div>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(80px,1fr))',gap:10,marginTop:4}}>{ALL_COLORS_ORDER.map(c=>{const avail=availSet.includes(c),on=form.colors.includes(c);const hex=COLOR_HEX[c]||'#888';const isGrad=hex.startsWith('linear');return <div key={c} className={`ctag ${on?"on":""} ${!avail?"dim":""}`} onClick={()=>avail&&toggleColor(c)}><span className="ctag-swatch" style={isGrad?{backgroundImage:hex}:{background:hex}}/><span className="ctag-name">{c}</span></div>;})}</div>
             {form.colors.length>0&&<div style={{marginTop:8}}><button className="link-btn" onClick={()=>set("colors",[])}>Clear colours</button></div>}
           </div>
           <div className="sect"><div className="sl">Blooming Target Seasons</div><div className="tags">{["Spring (Mar–May)","Summer (Jun–Aug)","Autumn (Sep–Nov)","Winter (Dec–Feb)","Year-round"].map(s=><div key={s} className={`tag ${form.bloomingTarget.includes(s)?"on":""}`} onClick={()=>tog("bloomingTarget",s)}>{s}</div>)}</div></div>
@@ -1188,10 +1267,9 @@ Write only the brief text, no headings or labels.`
 
     "conditions":()=>(
       <>
-        <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
         <div className="stp-title">Special <em>conditions</em></div>
         <div className="stp-desc">Location-specific conditions are pre-checked. Add any extra requirements your project needs.</div>
-        {autoConditions.length>0&&<div className="info-box" style={{marginBottom:20}}><strong style={{color:"#3a6020"}}>Auto-selected from {form.region||form.country}:</strong> {autoConditions.join(", ")}. You can deselect these if they don't apply.</div>}
+        {autoConditions.length>0&&<div className="info-box" style={{marginBottom:20}}><strong style={{color:"#163422"}}>Auto-selected from {form.region||form.country}:</strong> {autoConditions.join(", ")}. You can deselect these if they don't apply.</div>}
         <div className="sect"><div className="sl">Tolerances & Traits</div>
           <div className="tags">{CONDITIONS.map(c=>{const isAuto=autoConditions.includes(c),isOn=form.conditions.includes(c);return <div key={c} className={`tag ${isAuto?"auto":isOn?"on":""}`} onClick={()=>tog("conditions",c)}>{c}</div>;})}</div>
         </div>
@@ -1200,14 +1278,13 @@ Write only the brief text, no headings or labels.`
 
     "hd-materials":()=>(
       <>
-        <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
         <div className="stp-title">Hardscape <em>materials</em></div>
         <div className="stp-desc">Define the character and origin of the paving palette, then select specific materials and finishes.</div>
         <div className="sect"><div className="sl">Material Character</div><div className="div-cards">{HD_CHARACTER.map(h=><div key={h.val} className={`div-card ${form.hdCharacter===h.val?"on":""}`} onClick={()=>set("hdCharacter",h.val)}><div className="div-card-lbl">{h.label}</div><div className="div-card-sub">{h.sub}</div></div>)}</div></div>
         <div className="sect"><div className="sl">Material Origin</div><div className="tags">{HD_ORIGIN.map(o=><div key={o} className={`tag ${form.hdOrigin===o?"on":""}`} onClick={()=>set("hdOrigin",o)}>{o}</div>)}</div></div>
         <div className="sect">
           <div className="sl">Specific Materials</div>
-          <div style={{fontSize:12,color:"#7a8a68",marginBottom:10,lineHeight:1.7}}>Select materials you want to include. Leave blank and AI will suggest based on character and region.</div>
+          <div style={{fontSize:12,color:"#4c644e",marginBottom:10,lineHeight:1.7}}>Select materials you want to include. Leave blank and AI will suggest based on character and region.</div>
           <div className="tags">
             <div className={`tag sel-all ${form.hdMaterials.length===HD_MATERIALS.length?"on":""}`} onClick={()=>set("hdMaterials",form.hdMaterials.length===HD_MATERIALS.length?[]:[...HD_MATERIALS])}>{form.hdMaterials.length===HD_MATERIALS.length?"✓ All":"Select All"}</div>
             {HD_MATERIALS.map(m=><div key={m} className={`tag ${form.hdMaterials.includes(m)?"on":""}`} onClick={()=>tog("hdMaterials",m)}>{m}</div>)}
@@ -1219,7 +1296,6 @@ Write only the brief text, no headings or labels.`
 
     "hd-zones":()=>(
       <>
-        <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
         <div className="stp-title">Zones, colour &<br/><em>pattern</em></div>
         <div className="stp-desc">Define where the materials go, the colour tones you want, and preferred laying patterns.</div>
         <div className="sect">
@@ -1231,7 +1307,7 @@ Write only the brief text, no headings or labels.`
         </div>
         <div className="sect">
           <div className="sl">Colour Tones</div>
-          <div className="tags">{HD_COLORS.map(c=>{const on=form.hdColors.some(x=>(x.label||x)===c.label);return <div key={c.label} className={`ctag ${on?"on":""}`} onClick={()=>set("hdColors",on?form.hdColors.filter(x=>(x.label||x)!==c.label):[...form.hdColors,c])}><span className="cdot" style={{background:c.hex}}/>{c.label}</div>;})}</div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(80px,1fr))',gap:10,marginTop:4}}>{HD_COLORS.map(c=>{const on=form.hdColors.some(x=>(x.label||x)===c.label);return <div key={c.label} className={`ctag ${on?"on":""}`} onClick={()=>set("hdColors",on?form.hdColors.filter(x=>(x.label||x)!==c.label):[...form.hdColors,c])}><span className="ctag-swatch" style={{background:c.hex}}/><span className="ctag-name">{c.label}</span></div>;})}</div>
         </div>
         <div className="sect"><div className="sl">Laying Patterns</div><div className="tags">{HD_PATTERNS.map(p=><div key={p} className={`tag ${form.hdPatterns.includes(p)?"on":""}`} onClick={()=>tog("hdPatterns",p)}>{p}</div>)}</div></div>
       </>
@@ -1239,16 +1315,16 @@ Write only the brief text, no headings or labels.`
 
    "brief":()=>(
   <>
-    <div className="stp-eyebrow">Step {step+1} of {totalSteps}</div>
     <div className="stp-title">Design <em>brief</em></div>
     <div className="stp-desc">Add any extra notes, or let AI write a brief based on your selections.</div>
     <div className="sect">
       <div style={{display:'flex',justifyContent:'flex-end',marginBottom:12}}>
         <button onClick={autoGenerateBrief} disabled={generatingBrief} style={{
-          background:'transparent',border:'1px solid rgba(200,169,110,0.3)',
-          color:'#c8a96e',cursor:'pointer',fontFamily:'DM Sans,sans-serif',
-          fontSize:'10px',letterSpacing:'.12em',textTransform:'uppercase',
-          padding:'9px 20px',transition:'all .2s',opacity:generatingBrief?0.5:1
+          background:'linear-gradient(135deg,#163422,#2d4b37)',border:'none',
+          color:'#ffffff',cursor:'pointer',fontFamily:"'Plus Jakarta Sans',sans-serif",
+          fontSize:'12px',letterSpacing:'.04em',fontWeight:700,
+          padding:'10px 22px',transition:'all .2s',opacity:generatingBrief?0.5:1,
+          borderRadius:'9999px',boxShadow:'0 2px 8px rgba(22,52,34,0.18)'
         }}>
           {generatingBrief ? '✦ Writing…' : '✦ Auto-generate brief'}
         </button>
@@ -1280,14 +1356,14 @@ Write only the brief text, no headings or labels.`
             />
           )}
           {replacingPlant && (
-            <div style={{position:'fixed',top:0,right:0,width:'360px',height:'100vh',background:'white',borderLeft:'1px solid #e6ede0',zIndex:100,display:'flex',flexDirection:'column',boxShadow:'-4px 0 20px rgba(0,0,0,0.08)'}}>
-              <div style={{padding:'24px',borderBottom:'1px solid #e6ede0',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                <h2 style={{fontFamily:'Cormorant Garamond,serif',fontSize:'20px',fontWeight:400,color:'#2a3a18'}}>Choose a replacement</h2>
-                <button onClick={() => setReplacingPlant(null)} style={{background:'none',border:'none',fontSize:'20px',cursor:'pointer',color:'#8aaa60'}}>✕</button>
+            <div style={{position:'fixed',top:0,right:0,width:'360px',height:'100vh',background:'#f9faf8',borderLeft:'1px solid rgba(22,52,34,0.1)',zIndex:100,display:'flex',flexDirection:'column',boxShadow:'-8px 0 32px rgba(22,52,34,0.1)'}}>
+              <div style={{padding:'24px',borderBottom:'1px solid rgba(22,52,34,0.08)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'18px',fontWeight:800,color:'#163422',letterSpacing:'-.01em'}}>Choose a replacement</h2>
+                <button onClick={() => setReplacingPlant(null)} style={{background:'rgba(22,52,34,0.06)',border:'none',width:'32px',height:'32px',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',color:'#163422',fontSize:'16px',lineHeight:1}}>✕</button>
               </div>
               <div style={{flex:1,overflowY:'auto',padding:'16px'}}>
                 {(editableResult?.alternatives||[]).length === 0 && (
-                  <p style={{color:'#0b0b0bff',fontSize:'13px',textAlign:'center',marginTop:'40px'}}>No alternatives available.</p>
+                  <p style={{color:'rgba(22,52,34,0.4)',fontSize:'13px',textAlign:'center',marginTop:'40px',fontFamily:"'Plus Jakarta Sans',sans-serif"}}>No alternatives available.</p>
                 )}
                 {(editableResult?.alternatives||[]).map((alt, i) => (
   <AltCard
@@ -1300,10 +1376,21 @@ Write only the brief text, no headings or labels.`
             </div>
           )}
           <header className="hdr">
-            <div className="hdr-brand"><span style={{fontSize:24}}>⌘</span><div><div className="hdr-name">Land AI</div><div className="hdr-sub">AI Landscape Design Tool</div></div></div>
-            <div style={{display:'flex',alignItems:'center',gap:10}}>
-              <button onClick={() => setShowHistory(true)} style={{background:'white',border:'1px solid #ccd8b8',borderRadius:'6px',color:'#7a8a68',cursor:'pointer',fontFamily:'Jost,sans-serif',fontSize:'11px',padding:'7px 16px'}}>History</button>
-              <button onClick={() => supabase.auth.signOut()} style={{background:'white',border:'1px solid #ccd8b8',borderRadius:'6px',color:'#7a8a68',cursor:'pointer',fontFamily:'Jost,sans-serif',fontSize:'11px',padding:'7px 16px'}}>Sign out</button>
+            <div className="hdr-brand"><div><div className="hdr-name" onClick={onGoHome} style={{cursor:'pointer'}}>LandPal.</div></div></div>
+            <div className="hdr-nav-wrap">
+              <div className="hdr-btns" style={{display:'flex',alignItems:'center',gap:8}}>
+                <button onClick={()=>setShowHistory(true)} className="btn-action">History</button>
+                <button onClick={()=>supabase.auth.signOut()} className="btn-reset">Sign out</button>
+              </div>
+              <button className="hdr-mobile-menu" onClick={()=>setMobileMenuOpen(o=>!o)} aria-label="Menu">
+                <span/><span/><span/>
+              </button>
+              {mobileMenuOpen&&(
+                <div className="mobile-dropdown">
+                  <button onClick={()=>{setShowHistory(true);setMobileMenuOpen(false);}}>History</button>
+                  <button onClick={()=>supabase.auth.signOut()}>Sign out</button>
+                </div>
+              )}
             </div>
           </header>
           <div className="res-wrap">
@@ -1319,6 +1406,10 @@ Write only the brief text, no headings or labels.`
                 <button className="btn-reset" onClick={()=>{setResult(null);setEditableResult(null);setStep(0);setIsSaved(false);}}>← New</button>
               </div>
             </div>
+            {error&&<div className="err" style={{margin:'0 0 20px 0',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <span>⚠ {error}</span>
+              <button onClick={()=>setError(null)} style={{background:'none',border:'none',color:'rgba(220,120,100,0.7)',cursor:'pointer',fontSize:16,lineHeight:1,padding:'0 0 0 12px'}}>✕</button>
+            </div>}
             {hasSoft&&<>
               {hasHard&&<div className="sec-banner">🌿 Softscape</div>}
               {editableResult?.strategy&&<div className="strat-box"><div className="strat-lbl">Design Strategy & Rationale</div><div className="strat-txt">{editableResult.strategy}</div></div>}
@@ -1346,7 +1437,7 @@ Write only the brief text, no headings or labels.`
                           {(editableResult?.alternatives||[])
                             .filter(a => !editableResult.categories.flatMap(c=>c.plants).find(p=>p.commonName===a.commonName))
                             .map((alt,k) => (
-                              <button key={k} onClick={() => addPlant(cat.name, alt)} style={{padding:'6px 14px',border:'1px solid rgba(200,169,110,0.2)',background:'transparent',color:'rgba(200,169,110,0.7)',fontSize:'10px',cursor:'pointer',fontFamily:'DM Sans,sans-serif',letterSpacing:'.06em',textTransform:'uppercase'}}>
+                              <button key={k} onClick={() => addPlant(cat.name, alt)} style={{padding:'6px 14px',border:'1px solid rgba(22,52,34,0.15)',background:'transparent',color:'#4c644e',fontSize:'10px',cursor:'pointer',fontFamily:"'Plus Jakarta Sans',sans-serif",letterSpacing:'.06em',textTransform:'uppercase',borderRadius:'9999px'}}>
                                 + {alt.commonName}
                               </button>
                             ))
@@ -1391,9 +1482,15 @@ Write only the brief text, no headings or labels.`
               ))}
               {editableResult?.hardscapeAlternatives?.length>0&&<><hr className="divider"/><div className="alt-sec"><div className="alt-title">Hardscape Alternatives</div><div className="alt-grid">{editableResult.hardscapeAlternatives.map((a,i)=><div key={i} className="alt-item"><div className="alt-c">{a.name}</div><div className="alt-r">{a.reason}</div></div>)}</div></div></>}
             </>}
-            <div style={{textAlign:"center",marginTop:60}}><button className="btn-gen" onClick={()=>{setResult(null);setEditableResult(null);setStep(0);setIsSaved(false);}}>← Generate Another Palette</button></div>
+            <div style={{textAlign:"center",marginTop:40,marginBottom:40,padding:"0 16px"}}><button className="btn-gen" style={{width:'100%',maxWidth:360}} onClick={()=>{setResult(null);setEditableResult(null);setStep(0);setIsSaved(false);}}>← Generate Another Palette</button></div>
           </div>
         </div>
+        {toast&&(
+          <div className="toast">
+            <div className="toast-icon">{toast.icon}</div>
+            {toast.msg}
+          </div>
+        )}
       </>
     );
   }
@@ -1402,7 +1499,7 @@ Write only the brief text, no headings or labels.`
     <>
       <style>{FONTS+CSS}</style>
       <div className="app" ref={topRef}>
-        <header className="hdr"><div className="hdr-brand"><div className="hdr-logo">⌘</div><div><div className="hdr-name">Land AI</div><div className="hdr-sub">Landscape Intelligence</div></div></div></header>
+        <header className="hdr"><div className="hdr-brand"><div><div className="hdr-name" onClick={onGoHome} style={{cursor:'pointer'}}>LandPal.</div></div></div></header>
         <div className="loading">
           <div className="loading-t">Generating your landscape palette…</div>
           <div className="loading-s">{form.paletteType==="both"?"Running softscape then hardscape analysis — this may take a moment…":"Analysing location, conditions, and design brief"}</div>
@@ -1429,64 +1526,75 @@ Write only the brief text, no headings or labels.`
         )}
         <header className="hdr">
           <div className="hdr-brand">
-            <div className="hdr-logo">⌘</div>
-            <div><div className="hdr-name">Land AI</div><div className="hdr-sub">Landscape Intelligence</div></div>
+            <div><div className="hdr-name" onClick={onGoHome} style={{cursor:'pointer'}}>LandPal.</div></div>
           </div>
-          <div style={{display:'flex',alignItems:'center',gap:10}}>
-            <button onClick={() => setShowHistory(true)} className="btn-action">History</button>
-            <button onClick={() => supabase.auth.signOut()} className="btn-reset">Sign out</button>
+          <div className="hdr-nav-wrap">
+            {/* Desktop buttons */}
+            <div className="hdr-btns" style={{display:'flex',alignItems:'center',gap:8}}>
+              <button onClick={()=>setShowHistory(true)} className="btn-action">History</button>
+              <button onClick={()=>supabase.auth.signOut()} className="btn-reset">Sign out</button>
+            </div>
+            {/* Mobile hamburger */}
+            <button className="hdr-mobile-menu" onClick={()=>setMobileMenuOpen(o=>!o)} aria-label="Menu">
+              <span/><span/><span/>
+            </button>
+            {mobileMenuOpen&&(
+              <div className="mobile-dropdown">
+                <button onClick={()=>{setShowHistory(true);setMobileMenuOpen(false);}}>History</button>
+                <button onClick={()=>supabase.auth.signOut()}>Sign out</button>
+              </div>
+            )}
           </div>
         </header>
-        <div className="prog">
-          {form.paletteType==="both" ? (
-            <div>
-              {(()=>{
-                const groups=[];
-                stepDefs.forEach((s,i)=>{
-                  const sec=s.section||"";
-                  const last=groups[groups.length-1];
-                  if(last&&last.section===sec) last.steps.push({...s,i});
-                  else groups.push({section:sec,steps:[{...s,i}]});
-                });
-                return groups.map((g,gi)=>(
-                  <div key={gi} style={{marginBottom:g.section?4:0}}>
-                    {g.section&&<div style={{fontSize:"9px",letterSpacing:".14em",textTransform:"uppercase",color:g.section==="Softscape"?"#6a9a40":"#8a7a50",marginBottom:4,marginTop:gi>0?10:0}}>{g.section==="Softscape"?"🌿 Softscape":"🪨 Hardscape"}</div>}
-                    <div style={{display:"flex",gap:2,marginBottom:4}}>
-                      {g.steps.map(s=><div key={s.i} className={`pb2 ${s.i<step?"done":s.i===step?"act":""}`} style={{flex:1}}/>)}
-                    </div>
-                    <div style={{display:"flex",justifyContent:"space-between"}}>
-                      {g.steps.map(s=><span key={s.i} className={`prog-lbl ${s.i<=step?"act":""}`}>{s.label}</span>)}
-                    </div>
-                  </div>
-                ));
-              })()}
+        <div className="wizard-body">
+          {currentId === 'location' && (
+            <>
+              <div className="wizard-globe-bg">
+                <GlobeView country={form.country&&!form.country.startsWith('__')?form.country:null}/>
+              </div>
+              <div className="wizard-globe-fade"/>
+            </>
+          )}
+          {currentId === 'project' && (
+            <>
+              <div className="wizard-photo-bg" style={{backgroundImage:`url(${imgProjectSetup})`}}/>
+              <div className="wizard-photo-fade"/>
+            </>
+          )}
+          <div className="wizard-left">
+            <div className={`main ${stepVisible?'step-visible':'step-hidden'}`} style={currentId==='palette-type'?{maxWidth:'none',paddingRight:56}:{}}>
+              {StepContent?StepContent():<div style={{color:"rgba(22,52,34,0.3)",padding:"40px 0"}}>Loading step…</div>}
+              <div className="nav">
+                <button className="btn-back" style={{visibility:step===0?"hidden":"visible"}} onClick={()=>goToStep(step-1)}>← Back</button>
+                {!isLast
+                  ?<button className="btn-next" disabled={!canNext} onClick={()=>goToStep(step+1)}>Continue →</button>
+                  :<button className="btn-gen" disabled={isGenerating} onClick={generate}>
+                    {isGenerating?<><span className="btn-spinner"/>Generating…</>:<>✦ Generate {genLabel}</>}
+                  </button>
+                }
+              </div>
             </div>
-          ) : (
-            <div className="prog-inner">
-              {stepDefs.map((s,i)=>(
-                <React.Fragment key={i}>
-                  <div className="prog-step">
-                    <div className={`prog-step-num ${i<step?"done":i===step?"active":"pending"}`}>
-                      {i<step?"✓":i+1}
-                    </div>
-                    <span className={`prog-step-label ${i<step?"done":i===step?"active":"pending"}`}>{s.label}</span>
-                  </div>
-                  {i<stepDefs.length-1&&<div className={`prog-line ${i<step?"done":""}`}/>}
-                </React.Fragment>
+            {/* Dot progress */}
+            <div className="step-dots">
+              {stepDefs.map((_,i)=>(
+                <div key={i} className={`step-dot ${i===step?'active':i<step?'done':''}`}/>
               ))}
             </div>
+          </div>
+          {STEP_IMAGES[currentId] && currentId !== 'location' && currentId !== 'project' && currentId !== 'palette-type' && (
+            <>
+              <div className="wizard-photo-bg" style={{backgroundImage:`url(${STEP_IMAGES[currentId]})`,transition:"background-image .4s ease"}}/>
+              <div className="wizard-photo-fade"/>
+            </>
           )}
         </div>
-        <div className="main">
-          {StepContent?<StepContent/>:<div style={{color:"#8a9a70",padding:"40px 0"}}>Loading step…</div>}
-          <div className="nav">
-            <button className="btn-back" style={{visibility:step===0?"hidden":"visible"}} onClick={()=>setStep(s=>s-1)}>← Back</button>
-            {!isLast
-              ?<button className="btn-next" disabled={!canNext} onClick={()=>setStep(s=>s+1)}>Continue →</button>
-              :<button className="btn-gen" onClick={generate}>✦ Generate {genLabel}</button>
-            }
+        {/* Toast */}
+        {toast&&(
+          <div className="toast">
+            <div className="toast-icon">{toast.icon}</div>
+            {toast.msg}
           </div>
-        </div>
+        )}
       </div>
     </>
   );
