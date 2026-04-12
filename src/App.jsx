@@ -431,11 +431,114 @@ input::placeholder,textarea::placeholder{color:rgba(22,52,34,0.25)}
 .spin span:nth-child(2){animation-delay:.2s}.spin span:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.15;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
 
-.res-wrap{max-width:1200px;margin:0 auto;padding:48px 32px 100px}
-.res-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px;padding-bottom:32px;border-bottom:1px solid rgba(22,52,34,0.07)}
-.res-title{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:400;font-style:italic;color:#163422;line-height:1.05;letter-spacing:-.01em}
-.res-meta{font-size:11px;color:#4c644e;margin-top:8px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
-.res-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+/* ── Result page ── */
+.res-wrap{max-width:1160px;margin:0 auto;padding:0 32px 100px}
+
+/* Header */
+.res-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0;flex-wrap:wrap;gap:16px;padding:40px 0 32px;border-bottom:1px solid rgba(22,52,34,0.07)}
+.res-hdr-left{}
+.res-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:12px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif}
+.res-title{font-family:'Garet',sans-serif;font-size:40px;font-weight:400;color:#163422;line-height:1.05;letter-spacing:-.01em}
+.res-meta{font-size:12px;color:rgba(22,52,34,0.45);margin-top:6px;letter-spacing:.02em;font-family:'Plus Jakarta Sans',sans-serif}
+.res-hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.res-actions-primary{display:flex;gap:8px;align-items:center}
+.res-actions-secondary{display:flex;gap:6px;align-items:center}
+
+/* Stats bar */
+.res-stats{display:flex;gap:0;border:1px solid rgba(22,52,34,0.08);border-radius:16px;overflow:hidden;margin:28px 0 36px;background:#ffffff}
+.res-stat{flex:1;padding:18px 20px;border-right:1px solid rgba(22,52,34,0.07);text-align:center}
+.res-stat:last-child{border-right:none}
+.res-stat-val{font-family:'Garet',sans-serif;font-size:24px;font-weight:400;color:#163422;line-height:1;margin-bottom:4px}
+.res-stat-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(22,52,34,0.35);font-weight:600;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* Tabs */
+.res-tabs{display:flex;gap:0;border-bottom:1px solid rgba(22,52,34,0.08);margin-bottom:40px}
+.res-tab{background:none;border:none;border-bottom:2px solid transparent;padding:12px 24px;font-family:'Garet',sans-serif;font-size:13px;font-weight:400;color:rgba(22,52,34,0.4);cursor:pointer;transition:all .2s;margin-bottom:-1px;letter-spacing:.01em}
+.res-tab.active{color:#163422;border-bottom-color:#163422}
+.res-tab:hover{color:#163422}
+
+/* Strategy editorial block */
+.strat-box{padding:36px 0;margin-bottom:40px;border-bottom:1px solid rgba(22,52,34,0.06)}
+.strat-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(22,52,34,0.3);margin-bottom:16px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif}
+.strat-txt{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;font-style:italic;color:#163422;line-height:1.65;letter-spacing:-.01em;max-width:780px}
+.feasibility-box{background:rgba(255,248,235,0.8);border:1px solid rgba(180,120,30,0.18);border-left:3px solid #b87820;border-radius:16px;padding:18px 24px;margin-bottom:28px}
+.feasibility-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(160,100,20,0.65);margin-bottom:8px;font-weight:600}
+.feasibility-txt{font-size:13px;line-height:1.8;color:rgba(120,75,15,0.85)}
+
+/* Section banners */
+.sec-banner{font-family:'Garet',sans-serif;font-size:13px;font-weight:400;color:rgba(22,52,34,0.4);margin-bottom:32px;padding-bottom:14px;border-bottom:1px solid rgba(22,52,34,0.07);letter-spacing:.08em;text-transform:uppercase}
+
+/* Category */
+.cat-sec{margin-bottom:56px;position:relative}
+.cat-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:24px;padding:16px 0;border-bottom:1px solid rgba(22,52,34,0.06);position:sticky;top:69px;background:#f9faf8;z-index:10}
+.cat-icon{font-size:14px;opacity:.5}
+.cat-name{font-family:'Garet',sans-serif;font-size:18px;font-weight:400;color:#163422;letter-spacing:.01em}
+.cat-cnt{font-size:10px;color:rgba(22,52,34,0.4);background:rgba(22,52,34,0.06);border-radius:9999px;padding:3px 10px;letter-spacing:.04em;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* Plant cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;background:transparent}
+.pc{background:#ffffff;padding:0;transition:all .25s;border-radius:16px;border:1px solid rgba(22,52,34,0.08);overflow:hidden;position:relative}
+.pc:hover{border-color:rgba(22,52,34,0.18);box-shadow:0 8px 28px rgba(22,52,34,0.09);transform:translateY(-1px)}
+.pc-img-wrap{width:100%;height:130px;overflow:hidden;background:rgba(22,52,34,0.04);position:relative;flex-shrink:0}
+.pc-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.pc-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.25}
+.pc-body{padding:16px 18px 18px}
+.pc-common{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;font-style:italic;color:#163422;margin-bottom:2px;letter-spacing:-.01em;line-height:1.2}
+.pc-sci{font-style:italic;font-size:10px;color:#99baa1;margin-bottom:14px;font-weight:400;letter-spacing:.01em}
+.pc-key-specs{display:flex;gap:8px;margin-bottom:14px}
+.pc-spec{flex:1;background:#f7f8f6;padding:8px 10px;border-radius:10px;text-align:center}
+.pc-spec-val{font-size:11px;font-weight:600;color:#163422;line-height:1.2;margin-bottom:2px}
+.pc-spec-key{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(22,52,34,0.35);font-weight:600}
+.pc-water{display:flex;gap:3px;justify-content:center;margin-bottom:4px}
+.pc-drop{font-size:11px;opacity:.2}
+.pc-drop.filled{opacity:1}
+.pbadges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.bp{font-size:9px;padding:3px 9px;border-radius:9999px;letter-spacing:.03em;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif}
+.bp-g{background:rgba(200,235,208,0.5);color:#163422;border:1px solid rgba(22,52,34,0.1)}
+.bp-a{background:rgba(255,243,215,0.7);color:#7a4f0a;border:1px solid rgba(180,120,30,0.18)}
+.bp-b{background:rgba(210,225,250,0.6);color:#1a3870;border:1px solid rgba(50,90,190,0.14)}
+.bp-p{background:rgba(235,215,250,0.6);color:#4a1870;border:1px solid rgba(120,50,190,0.14)}
+.bp-t{background:rgba(200,245,225,0.55);color:#0a4228;border:1px solid rgba(20,130,80,0.14)}
+.pnote{font-size:11px;color:#4c644e;line-height:1.6;border-top:1px solid rgba(22,52,34,0.06);padding-top:10px;font-style:italic;opacity:.8}
+.pc-actions{display:flex;gap:6px;margin-top:12px;opacity:0;transition:opacity .2s}
+.pc:hover .pc-actions{opacity:1}
+.pc-act-btn{flex:1;background:transparent;border:1px solid rgba(22,52,34,0.12);border-radius:8px;padding:7px 10px;font-size:10px;color:rgba(22,52,34,0.5);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;transition:all .18s;letter-spacing:.03em}
+.pc-act-btn:hover{background:rgba(22,52,34,0.05);color:#163422;border-color:rgba(22,52,34,0.22)}
+.pc-act-btn.danger:hover{background:rgba(220,40,40,0.05);color:rgba(180,20,20,0.8);border-color:rgba(220,40,40,0.2)}
+
+/* Hardscape cards */
+.hd-section{margin-bottom:48px}
+.hd-sec-title{font-family:'Garet',sans-serif;font-size:14px;font-weight:400;color:rgba(22,52,34,0.5);margin-bottom:16px;display:flex;align-items:center;gap:10px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid rgba(22,52,34,0.06);padding-bottom:12px}
+.hd-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;background:transparent}
+.hd-card{background:#ffffff;padding:0;transition:all .25s;border-radius:16px;border:1px solid rgba(22,52,34,0.08);overflow:hidden}
+.hd-card:hover{border-color:rgba(22,52,34,0.18);box-shadow:0 8px 28px rgba(22,52,34,0.09);transform:translateY(-1px)}
+.hd-card-swatch{height:52px;width:100%;flex-shrink:0}
+.hd-card-body{padding:16px 18px 18px}
+.hd-card-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;font-style:italic;color:#163422;margin-bottom:2px;letter-spacing:-.01em}
+.hd-card-sub{font-size:10px;color:#99baa1;margin-bottom:14px;font-style:italic;font-weight:400;letter-spacing:.01em}
+.hd-attrs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+.hd-attr{background:#f7f8f6;padding:8px 10px;border-radius:10px}
+.hd-attr-k{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:2px;font-weight:600}
+.hd-attr-v{font-size:11px;color:#163422;font-weight:500}
+.hd-note{font-size:11px;color:#4c644e;line-height:1.6;border-top:1px solid rgba(22,52,34,0.06);padding-top:10px;font-style:italic;opacity:.8}
+
+/* Alternatives */
+.alt-sec{margin-top:40px;background:#f7f8f6;border:1px solid rgba(22,52,34,0.06);padding:28px;border-radius:20px}
+.alt-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#163422;margin-bottom:18px;font-weight:400;font-style:italic;letter-spacing:-.01em}
+.alt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.alt-item{background:#ffffff;padding:14px;border-radius:12px;border:1px solid rgba(22,52,34,0.06);transition:box-shadow .2s}
+.alt-item:hover{box-shadow:0 2px 12px rgba(22,52,34,0.07)}
+.alt-c{font-family:'Cormorant Garamond',serif;font-size:16px;color:#163422;margin-bottom:2px;font-weight:500;font-style:italic}
+.alt-s{font-style:italic;font-size:10px;color:#99baa1;margin-bottom:5px}
+.alt-r{font-size:11px;color:#4c644e;line-height:1.5}
+
+@media print{
+  .hdr,.res-actions-primary,.res-actions-secondary,.pc-actions,.toast{display:none!important}
+  .res-wrap{padding:0 20px}
+  .pc,.hd-card{break-inside:avoid;box-shadow:none!important;border:1px solid #ddd!important;transform:none!important}
+  .cat-hdr{position:static!important;background:white!important}
+  .res-tabs{display:none!important}
+}
 
 .btn-reset{background:transparent;border:1px solid rgba(232,240,232,0.14);border-radius:6px;color:rgba(232,240,232,0.4);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:500;padding:8px 18px;transition:all .2s}
 .btn-reset:hover{border-color:rgba(232,240,232,0.32);color:rgba(232,240,232,0.75)}
@@ -446,38 +549,6 @@ input::placeholder,textarea::placeholder{color:rgba(22,52,34,0.25)}
 .btn-save:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 .btn-pdf{background:linear-gradient(135deg,#163422,#2d4b37);border:none;border-radius:9999px;color:#ffffff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;padding:9px 18px;transition:all .2s;box-shadow:0 1px 6px rgba(22,52,34,0.18)}
 .btn-pdf:hover{opacity:.9}
-
-.strat-box{background:rgba(200,235,208,0.15);border:1px solid rgba(22,52,34,0.09);border-left:3px solid #163422;border-radius:16px;padding:22px 28px;margin-bottom:32px}
-.strat-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:10px;font-weight:600}
-.strat-txt{font-size:13px;line-height:1.8;color:#4c644e}
-.feasibility-box{background:rgba(255,248,235,0.8);border:1px solid rgba(180,120,30,0.18);border-left:3px solid #b87820;border-radius:16px;padding:18px 24px;margin-bottom:28px}
-.feasibility-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(160,100,20,0.65);margin-bottom:8px;font-weight:600}
-.feasibility-txt{font-size:13px;line-height:1.8;color:rgba(120,75,15,0.85)}
-
-.sec-banner{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;font-style:italic;color:#163422;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(22,52,34,0.07);display:flex;align-items:center;gap:14px;letter-spacing:-.01em}
-.cat-sec{margin-bottom:52px}
-.cat-hdr{display:flex;align-items:center;gap:14px;margin-bottom:20px}
-.cat-icon{font-size:16px;opacity:.8}
-.cat-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;font-style:italic;color:#163422;letter-spacing:-.01em}
-.cat-cnt{font-size:10px;color:#4c644e;background:rgba(200,235,208,0.35);border:1px solid rgba(22,52,34,0.1);border-radius:9999px;padding:3px 12px;letter-spacing:.05em;font-weight:600}
-
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;background:transparent}
-.pc{background:#ffffff;padding:22px;transition:all .2s;border-radius:20px;border:1px solid rgba(22,52,34,0.08)}
-.pc:hover{border-color:rgba(22,52,34,0.16);box-shadow:0 4px 20px rgba(22,52,34,0.07)}
-.pc-common{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;font-style:italic;color:#163422;margin-bottom:3px;letter-spacing:-.01em}
-.pc-sci{font-style:italic;font-size:11px;color:#99baa1;margin-bottom:14px;font-weight:400}
-.pc-attrs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.pa{background:#f3f4f2;padding:9px 11px;border-radius:10px}
-.pa-k{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(22,52,34,0.35);margin-bottom:3px;font-weight:600}
-.pa-v{font-size:12px;color:#163422;font-weight:500}
-.pbadges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.bp{font-size:9px;padding:3px 10px;border-radius:9999px;letter-spacing:.04em;text-transform:uppercase;font-weight:700}
-.bp-g{background:rgba(200,235,208,0.5);color:#163422;border:1px solid rgba(22,52,34,0.1)}
-.bp-a{background:rgba(255,243,215,0.7);color:#7a4f0a;border:1px solid rgba(180,120,30,0.18)}
-.bp-b{background:rgba(210,225,250,0.6);color:#1a3870;border:1px solid rgba(50,90,190,0.14)}
-.bp-p{background:rgba(235,215,250,0.6);color:#4a1870;border:1px solid rgba(120,50,190,0.14)}
-.bp-t{background:rgba(200,245,225,0.55);color:#0a4228;border:1px solid rgba(20,130,80,0.14)}
-.pnote{font-size:11px;color:#4c644e;line-height:1.6;border-top:1px solid rgba(22,52,34,0.06);padding-top:10px;font-style:italic;opacity:.8}
 
 .tbl-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
 .tbl-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;font-style:italic;color:#163422;letter-spacing:-.01em}
@@ -607,55 +678,72 @@ function AltCard({ alt, onSelect }) {
 
 function PlantCard({p, onRemove, onReplace}){
   const imgUrl = usePlantImage(p.scientificName);
-  if (p.loading) return (
-    <div className="pc" style={{display:'flex',flexDirection:'column',gap:10}}>
-      <div style={{width:'100%',height:'160px',background:'linear-gradient(90deg,rgba(22,52,34,0.04) 25%,rgba(22,52,34,0.08) 50%,rgba(22,52,34,0.04) 75%)',backgroundSize:'200% 100%',animation:'shimmer 1.5s infinite',borderRadius:'8px'}}/>
-      <div style={{height:16,width:'55%',background:'rgba(22,52,34,0.06)',borderRadius:'6px'}}/>
-      <div style={{height:11,width:'38%',background:'rgba(22,52,34,0.04)',borderRadius:'6px'}}/>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
-        {[1,2,3,4].map(i=><div key={i} style={{height:36,background:'#f3f4f2',borderRadius:'8px'}}/>)}
+
+  // Water level: Low=1, Moderate=2, High=3
+  const waterLevel = p.water==='Low'?1:p.water==='High'?3:2;
+
+  // Height display
+  const heightDisplay = p.controllableHeight || p.maxHeight || '—';
+
+  // Form display
+  const formDisplay = p.form ? p.form.split('/')[0].trim() : '—';
+
+  if(p.loading) return (
+    <div className="pc">
+      <div className="pc-img-wrap" style={{background:'linear-gradient(90deg,#f0f2ef 25%,#e8ece7 50%,#f0f2ef 75%)',backgroundSize:'200% 100%',animation:'shimmer 1.5s infinite'}}/>
+      <div className="pc-body">
+        <div style={{height:16,background:'linear-gradient(90deg,#f0f2ef 25%,#e8ece7 50%,#f0f2ef 75%)',backgroundSize:'200% 100%',animation:'shimmer 1.5s infinite',borderRadius:6,marginBottom:8,width:'70%'}}/>
+        <div style={{height:10,background:'linear-gradient(90deg,#f0f2ef 25%,#e8ece7 50%,#f0f2ef 75%)',backgroundSize:'200% 100%',animation:'shimmer 1.5s infinite',borderRadius:6,width:'45%'}}/>
       </div>
-      <p style={{fontSize:10,color:'rgba(22,52,34,0.3)',textAlign:'center',letterSpacing:'.08em',textTransform:'uppercase',fontFamily:"'Plus Jakarta Sans',sans-serif"}}>Fetching plant data…</p>
     </div>
   );
+
+  const badges=[];
+  if(p.evergreen)badges.push({l:'Evergreen',c:'bp-g'});
+  if(p.nativeLocal)badges.push({l:'Native',c:'bp-t'});
+  if(p.droughtTolerant)badges.push({l:'Drought Tolerant',c:'bp-a'});
+  if(p.saltTolerant)badges.push({l:'Salt Tolerant',c:'bp-b'});
+  if(p.humidityTolerant)badges.push({l:'Humidity',c:'bp-b'});
+  if(p.windResistant)badges.push({l:'Wind Resistant',c:'bp-p'});
+  if(p.slabSuitable)badges.push({l:'Slab OK',c:'bp-a'});
+  if(p.fragrant)badges.push({l:'Fragrant',c:'bp-p'});
+  if(p.lowMaintenance)badges.push({l:'Low Maintenance',c:'bp-g'});
+  if(p.slopeStabiliser)badges.push({l:'Slope',c:'bp-t'});
+
   return(
     <div className="pc">
-      {imgUrl
-        ? <img src={imgUrl} alt={p.commonName} style={{width:'100%',height:'180px',objectFit:'cover',objectPosition:'center',borderRadius:'10px',marginBottom:'14px',display:'block'}}/>
-        : <div style={{width:'100%',height:'180px',background:'linear-gradient(135deg,#e8f4e8,#f3f7f0)',borderRadius:'10px',marginBottom:'14px'}}></div>
-      }
-      <div className="pc-common">{p.commonName}</div>
-      {p.scientificName&&<div className="pc-sci">{p.scientificName}</div>}
-      <div className="pc-attrs">
-        {p.maxHeight&&<div className="pa"><div className="pa-k">Max Height</div><div className="pa-v">{p.maxHeight}</div></div>}
-        {p.controllableHeight&&<div className="pa"><div className="pa-k">Can Be Kept At</div><div className="pa-v">{p.controllableHeight}</div></div>}
-        {p.spread&&<div className="pa"><div className="pa-k">Spread / Width</div><div className="pa-v">{p.spread}</div></div>}
-        {p.rootDepth&&<div className="pa"><div className="pa-k">Root Depth</div><div className="pa-v">{p.rootDepth}</div></div>}
-        {p.water&&<div className="pa"><div className="pa-k">Water Needs</div><div className="pa-v">{p.water}</div></div>}
-        {p.form&&<div className="pa"><div className="pa-k">Form</div><div className="pa-v">{p.form}</div></div>}
-        {p.bloomColor&&<div className="pa"><div className="pa-k">Bloom Colour</div><div className="pa-v">{p.bloomColor}</div></div>}
-        {p.bloomSeason&&<div className="pa"><div className="pa-k">Bloom Season</div><div className="pa-v">{p.bloomSeason}</div></div>}
+      <div className="pc-img-wrap">
+        {imgUrl
+          ? <img src={imgUrl} alt={p.commonName} loading="lazy"/>
+          : <div className="pc-img-placeholder">🌿</div>
+        }
       </div>
-      <div className="pbadges">
-        {p.evergreen===true&&<Bdg text="Evergreen" type="g"/>}
-        {p.evergreen===false&&<Bdg text="Deciduous" type="a"/>}
-        {p.saltTolerant&&<Bdg text="Salt Tolerant" type="t"/>}
-        {p.droughtTolerant&&<Bdg text="Drought Tolerant" type="a"/>}
-        {p.humidityTolerant&&<Bdg text="Humidity Tolerant" type="b"/>}
-        {p.windResistant&&<Bdg text="Wind Resistant" type="t"/>}
-        {p.slabSuitable&&<Bdg text="Slab Suitable" type="p"/>}
-        {p.nativeLocal&&<Bdg text="Local / Native" type="g"/>}
-        {p.fragrant&&<Bdg text="Fragrant" type="b"/>}
-        {p.slopeStabiliser&&<Bdg text="Slope Stabiliser" type="t"/>}
-        {p.lowMaintenance&&<Bdg text="Low Maintenance" type="g"/>}
-      </div>
-      {p.note&&<div className="pnote">{p.note}</div>}
-      {(onRemove||onReplace)&&(
-        <div style={{display:'flex',gap:6,marginTop:12,paddingTop:12,borderTop:'1px solid rgba(22,52,34,0.06)'}}>
-          {onReplace&&<button onClick={onReplace} style={{flex:1,padding:'8px',border:'1px solid rgba(22,52,34,0.15)',background:'#f3f4f2',color:'#163422',fontSize:'11px',cursor:'pointer',fontFamily:"'Plus Jakarta Sans',sans-serif",letterSpacing:'.04em',textTransform:'uppercase',fontWeight:600,borderRadius:'9999px',transition:'all .18s'}}>↔ Replace</button>}
-          {onRemove&&<button onClick={onRemove} style={{padding:'8px 14px',border:'1px solid rgba(200,60,60,0.15)',background:'rgba(200,60,60,0.04)',color:'rgba(180,40,40,0.6)',fontSize:'11px',cursor:'pointer',fontFamily:"'Plus Jakarta Sans',sans-serif",borderRadius:'9999px',transition:'all .18s'}}>✕</button>}
+      <div className="pc-body">
+        <div className="pc-common">{p.commonName}</div>
+        {p.scientificName&&<div className="pc-sci">{p.scientificName}</div>}
+        <div className="pc-key-specs">
+          <div className="pc-spec">
+            <div className="pc-spec-val">{heightDisplay}</div>
+            <div className="pc-spec-key">Height</div>
+          </div>
+          <div className="pc-spec">
+            <div className="pc-water">
+              {[1,2,3].map(i=><span key={i} className={`pc-drop${i<=waterLevel?' filled':''}`}>💧</span>)}
+            </div>
+            <div className="pc-spec-key">Water</div>
+          </div>
+          <div className="pc-spec">
+            <div className="pc-spec-val" style={{fontSize:10}}>{formDisplay}</div>
+            <div className="pc-spec-key">Form</div>
+          </div>
         </div>
-      )}
+        {badges.length>0&&<div className="pbadges">{badges.slice(0,4).map((b,i)=><span key={i} className={`bp ${b.c}`}>{b.l}</span>)}</div>}
+        {p.note&&<div className="pnote">{p.note}</div>}
+        <div className="pc-actions">
+          <button className="pc-act-btn" onClick={onReplace}>↻ Replace</button>
+          <button className="pc-act-btn danger" onClick={onRemove}>✕ Remove</button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -738,6 +826,7 @@ export default function App({ session, onGoHome }){
   const[toast,setToast]=useState(null);
   const[isGenerating,setIsGenerating]=useState(false);
   const[mobileMenuOpen,setMobileMenuOpen]=useState(false);
+  const[activeTab,setActiveTab]=useState('softscape');
   const topRef=useRef(null);
 
   const showToast=(msg,icon='✓')=>{setToast({msg,icon});setTimeout(()=>setToast(null),3200);};
@@ -1407,22 +1496,44 @@ Write only the brief text, no headings or labels.`
           </header>
           <div className="res-wrap">
             <div className="res-hdr">
-              <div><div className="res-title">Landscape Palette</div><div className="res-meta">{meta}</div></div>
-              <div className="res-actions">
-                <button onClick={() => setShowHistory(true)} className="btn-action">History</button>
-                <button onClick={() => exportToPptx(editableResult, form)} className="btn-action">↓ PPTX</button>
-                <button onClick={() => exportToDxf(editableResult, form)} className="btn-action">↓ DXF</button>
-                <button onClick={handleSave} disabled={isSaving||isSaved} className="btn-save">
-                  {isSaving?'Saving…':isSaved?'✓ Saved':'Save'}
-                </button>
-                <button className="btn-reset" onClick={()=>{setResult(null);setEditableResult(null);setStep(0);setIsSaved(false);}}>← New</button>
+              <div className="res-hdr-left">
+                <div className="res-eyebrow">Landscape Palette</div>
+                <div className="res-title">{[form.country, form.region?.replace('__c:',''), form.projectType].filter(Boolean)[0] || 'Your Project'}</div>
+                <div className="res-meta">{meta}</div>
+              </div>
+              <div className="res-hdr-right">
+                <div className="res-actions-primary">
+                  <button onClick={handleSave} disabled={isSaving||isSaved} className="btn-save">
+                    {isSaving?'Saving…':isSaved?'✓ Saved':'Save'}
+                  </button>
+                  <button className="btn-reset" onClick={()=>{setResult(null);setEditableResult(null);setStep(0);setIsSaved(false);}}>← New</button>
+                </div>
+                <div className="res-actions-secondary">
+                  <button onClick={() => setShowHistory(true)} className="btn-action">History</button>
+                  <button onClick={() => exportToPptx(editableResult, form)} className="btn-action">↓ PPTX</button>
+                  <button onClick={() => exportToDxf(editableResult, form)} className="btn-action">↓ DXF</button>
+                </div>
               </div>
             </div>
+            {/* Stats bar */}
+            <div className="res-stats">
+              {hasSoft&&<div className="res-stat"><div className="res-stat-val">{(editableResult?.categories||[]).reduce((n,c)=>n+(c.plants?.length||0),0)}</div><div className="res-stat-lbl">Plants</div></div>}
+              {hasSoft&&<div className="res-stat"><div className="res-stat-val">{(editableResult?.categories||[]).length}</div><div className="res-stat-lbl">Categories</div></div>}
+              {hasHard&&<div className="res-stat"><div className="res-stat-val">{(editableResult?.hardscapeCategories||[]).length}</div><div className="res-stat-lbl">Zones</div></div>}
+              <div className="res-stat"><div className="res-stat-val">{new Date().getFullYear()}</div><div className="res-stat-lbl">Generated</div></div>
+            </div>
+            {/* Tabs — only when both exist */}
+            {hasSoft&&hasHard&&(
+              <div className="res-tabs">
+                <button className={`res-tab${activeTab==='softscape'?' active':''}`} onClick={()=>setActiveTab('softscape')}>🌿 Softscape</button>
+                <button className={`res-tab${activeTab==='hardscape'?' active':''}`} onClick={()=>setActiveTab('hardscape')}>◈ Hardscape</button>
+              </div>
+            )}
             {error&&<div className="err" style={{margin:'0 0 20px 0',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
               <span>⚠ {error}</span>
               <button onClick={()=>setError(null)} style={{background:'none',border:'none',color:'rgba(220,120,100,0.7)',cursor:'pointer',fontSize:16,lineHeight:1,padding:'0 0 0 12px'}}>✕</button>
             </div>}
-            {hasSoft&&<>
+            {(!hasHard||activeTab==='softscape')&&hasSoft&&<>
               {hasHard&&<div className="sec-banner">🌿 Softscape</div>}
               {editableResult?.strategy&&<div className="strat-box"><div className="strat-lbl">Design Strategy & Rationale</div><div className="strat-txt">{editableResult.strategy}</div></div>}
               {editableResult?.feasibilityNotes&&editableResult.feasibilityNotes!=="null"&&<div className="feasibility-box"><div className="feasibility-lbl">⚠ Feasibility Notes</div><div className="feasibility-txt">{editableResult.feasibilityNotes}</div></div>}
@@ -1464,8 +1575,8 @@ Write only the brief text, no headings or labels.`
               {editableResult?.specTable?.length>0&&<><hr className="divider"/><SpecTable rows={editableResult.specTable} meta={meta}/></>}
               {editableResult?.alternatives?.length>0&&<><hr className="divider"/><div className="alt-sec"><div className="alt-title">Softscape Alternatives</div><div className="alt-grid">{editableResult.alternatives.map((a,i)=><div key={i} className="alt-item"><div className="alt-c">{a.commonName}</div>{a.scientificName&&<div className="alt-s">{a.scientificName}</div>}<div className="alt-r">{a.reason}</div></div>)}</div></div></>}
             </>}
-            {hasHard&&<>
-              <hr className="divider"/>
+            {(!hasSoft||activeTab==='hardscape')&&hasHard&&<>
+              {hasSoft&&<hr className="divider"/>}
               {hasSoft&&<div className="sec-banner">🪨 Hardscape</div>}
               {!hasSoft&&<div className="strat-box" style={{marginBottom:28}}><div className="strat-lbl">Project</div><div className="strat-txt">{meta}</div></div>}
               {editableResult?.hardscapeStrategy&&<div className="strat-box"><div className="strat-lbl">Material Strategy & Rationale</div><div className="strat-txt">{editableResult.hardscapeStrategy}</div></div>}
@@ -1474,6 +1585,8 @@ Write only the brief text, no headings or labels.`
                   <div className="hd-sec-title"><span>◈</span>{zone.zone}</div>
                   <div className="hd-cards">{(zone.materials||[]).map((m,j)=>(
                     <div key={j} className="hd-card">
+                      {m.color&&<div className="hd-card-swatch" style={{background:HD_COLORS.find(c=>c.label===m.color)?.hex||'#d4b896'}}/>}
+                      <div className="hd-card-body">
                       <div className="hd-card-name">{m.name}</div>
                       <div className="hd-card-sub">{m.type}{m.origin?` · ${m.origin}`:""}</div>
                       <div className="hd-attrs">
@@ -1487,6 +1600,7 @@ Write only the brief text, no headings or labels.`
                         {m.cost&&<div className="hd-attr"><div className="hd-attr-k">Cost Range</div><div className="hd-attr-v">{m.cost}</div></div>}
                       </div>
                       {m.note&&<div className="hd-note">{m.note}</div>}
+                      </div>
                     </div>
                   ))}</div>
                   {i<(editableResult?.hardscapeCategories||[]).length-1&&<hr className="divider"/>}
