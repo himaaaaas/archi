@@ -481,7 +481,7 @@ input::placeholder,textarea::placeholder{color:rgba(22,52,34,0.25)}
 .pc:hover{border-color:rgba(22,52,34,0.18);box-shadow:0 8px 28px rgba(22,52,34,0.09);transform:translateY(-1px)}
 .pc-img-wrap{width:100%;height:130px;overflow:hidden;background:rgba(22,52,34,0.04);position:relative;flex-shrink:0}
 .pc-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-.pc-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.25}
+.pc-img-placeholder{width:100%;height:100%;background:#ffffff}
 .pc-body{padding:16px 18px 18px}
 .pc-common{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;font-style:italic;color:#163422;margin-bottom:2px;letter-spacing:-.01em;line-height:1.2}
 .pc-sci{font-style:italic;font-size:10px;color:#99baa1;margin-bottom:14px;font-weight:400;letter-spacing:.01em}
@@ -715,7 +715,7 @@ function PlantCard({p, onRemove, onReplace}){
       <div className="pc-img-wrap">
         {imgUrl
           ? <img src={imgUrl} alt={p.commonName} loading="lazy"/>
-          : <div className="pc-img-placeholder">◈</div>
+          : <div className="pc-img-placeholder"></div>
         }
       </div>
       <div className="pc-body">
