@@ -516,6 +516,11 @@ tr:hover td{background:rgba(22,52,34,0.015)}
 
 .divider{border:none;border-top:1px solid rgba(22,52,34,0.06);margin:40px 0}
 .err{background:rgba(220,40,40,0.04);border:1px solid rgba(220,40,40,0.14);border-radius:12px;color:rgba(170,25,25,0.8);font-size:12px;padding:14px 18px;margin-top:14px;line-height:1.6}
+.err-page{min-height:calc(100vh - 69px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+.err-page-icon{font-size:48px;margin-bottom:24px}
+.err-page-title{font-family:'Garet',sans-serif;font-size:32px;font-weight:400;color:#1a1a1a;margin-bottom:12px}
+.err-page-msg{font-size:14px;color:rgba(26,26,26,0.5);line-height:1.8;max-width:480px;margin-bottom:36px}
+.err-page-actions{display:flex;gap:12px}
 
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
@@ -858,8 +863,15 @@ export default function App({ session, onGoHome }){
   ].filter(Boolean).join("\n");
 
   const callAPI=async prompt=>{
-    const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({prompt})});
+    let res;
+    try{
+      res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({prompt})});
+    }catch(err){
+      if(err.message.includes('Failed to fetch')||err.message.includes('NetworkError'))
+        throw new Error('Could not reach the server. Please check your connection and try again.');
+      throw err;
+    }
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||"API error");
     const clean=data.text.replace(/```json[\s\S]*?```/g,m=>m.slice(7,-3)).replace(/```/g,"").trim();
@@ -1504,6 +1516,24 @@ Write only the brief text, no headings or labels.`
           <div className="loading-t">Generating your landscape palette…</div>
           <div className="loading-s">{form.paletteType==="both"?"Running softscape then hardscape analysis — this may take a moment…":"Analysing location, conditions, and design brief"}</div>
           <div className="spin"><span/><span/><span/></div>
+        </div>
+      </div>
+    </>
+  );
+
+  if(error&&!loading&&!result)return(
+    <>
+      <style>{FONTS+CSS}</style>
+      <div className="app" ref={topRef}>
+        <header className="hdr"><div className="hdr-brand"><div><div className="hdr-name" onClick={()=>{setError(null);goToStep(0);}} style={{cursor:'pointer'}}>LandPal.</div></div></div></header>
+        <div className="err-page">
+          <div className="err-page-icon">🌿</div>
+          <div className="err-page-title">Something went wrong</div>
+          <div className="err-page-msg">{error}</div>
+          <div className="err-page-actions">
+            <button className="btn-next" onClick={()=>{setError(null);generate();}}>Try Again</button>
+            <button className="btn-back" onClick={()=>{setError(null);goToStep(0);}}>← Start Over</button>
+          </div>
         </div>
       </div>
     </>

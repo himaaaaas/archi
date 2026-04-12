@@ -4,6 +4,9 @@ import { useState } from 'react'
 
 export default function Login({ session, onEnterApp }) {
   const [showSignInModal, setShowSignInModal] = useState(false)
+  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' })
+  const [contactStatus, setContactStatus] = useState(null) // null | 'sending' | 'sent' | 'error'
+  const [contactError, setContactError] = useState('')
 
   // Called from navbar Sign In — just signs in, stays on landing page
   const handleGoogle = async () => {
@@ -20,6 +23,35 @@ export default function Login({ session, onEnterApp }) {
       provider: 'google',
       options: { redirectTo: window.location.origin }
     })
+  }
+
+  const handleContactSubmit = async () => {
+    const { name, email, message } = contactForm
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setContactError('Please fill in all fields.')
+      return
+    }
+    setContactError('')
+    setContactStatus('sending')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), message: message.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Something went wrong.')
+      setContactStatus('sent')
+    } catch (err) {
+      setContactError(err.message || 'Failed to send. Please try again.')
+      setContactStatus('error')
+    }
+  }
+
+  const handleContactReset = () => {
+    setContactForm({ name: '', email: '', message: '' })
+    setContactStatus(null)
+    setContactError('')
   }
 
   // If already signed in, go straight to the wizard; otherwise show modal
@@ -188,19 +220,58 @@ export default function Login({ session, onEnterApp }) {
             </div>
           </div>
           <div className="lp-contact-form">
-            <div className="lp-form-group">
-              <label className="lp-form-label">Name</label>
-              <input className="lp-form-input" type="text" placeholder="Your name"/>
-            </div>
-            <div className="lp-form-group">
-              <label className="lp-form-label">Email</label>
-              <input className="lp-form-input" type="email" placeholder="your@email.com"/>
-            </div>
-            <div className="lp-form-group">
-              <label className="lp-form-label">Message</label>
-              <textarea className="lp-form-input lp-form-textarea" placeholder="How can we help you?"/>
-            </div>
-            <button className="lp-form-submit">Talk to us</button>
+            {contactStatus === 'sent' ? (
+              <div style={{textAlign:'center',padding:'32px 16px'}}>
+                <div style={{fontFamily:"'Garet',sans-serif",fontSize:'clamp(28px,4vw,40px)',fontWeight:400,color:'#1a1a1a',marginBottom:12}}>Message received.</div>
+                <p style={{fontSize:14,color:'rgba(26,26,26,0.5)',lineHeight:1.85,marginBottom:32,fontWeight:300}}>We'll be in touch soon.</p>
+                <button className="lp-form-submit" style={{maxWidth:200,margin:'0 auto'}} onClick={handleContactReset}>Send another</button>
+              </div>
+            ) : (
+              <>
+                <div className="lp-form-group">
+                  <label className="lp-form-label">Name</label>
+                  <input
+                    className="lp-form-input"
+                    type="text"
+                    placeholder="Your name"
+                    value={contactForm.name}
+                    onChange={e => setContactForm(f => ({ ...f, name: e.target.value }))}
+                  />
+                </div>
+                <div className="lp-form-group">
+                  <label className="lp-form-label">Email</label>
+                  <input
+                    className="lp-form-input"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={contactForm.email}
+                    onChange={e => setContactForm(f => ({ ...f, email: e.target.value }))}
+                  />
+                </div>
+                <div className="lp-form-group">
+                  <label className="lp-form-label">Message</label>
+                  <textarea
+                    className="lp-form-input lp-form-textarea"
+                    placeholder="How can we help you?"
+                    value={contactForm.message}
+                    onChange={e => setContactForm(f => ({ ...f, message: e.target.value }))}
+                  />
+                </div>
+                <button
+                  className="lp-form-submit"
+                  disabled={contactStatus === 'sending'}
+                  onClick={handleContactSubmit}
+                  style={contactStatus === 'sending' ? {opacity:0.6,cursor:'not-allowed'} : {}}
+                >
+                  {contactStatus === 'sending' ? 'Sending…' : 'Talk to us'}
+                </button>
+                {contactError && (
+                  <div style={{fontSize:12,color:'rgba(180,30,30,0.85)',marginTop:4,lineHeight:1.6}}>
+                    {contactError}
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
