@@ -553,7 +553,7 @@ input::placeholder,textarea::placeholder{color:rgba(22,52,34,0.25)}
 .tbl-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
 .tbl-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;font-style:italic;color:#163422;letter-spacing:-.01em}
 .tbl-wrap{overflow-x:auto;border:1px solid rgba(22,52,34,0.08);border-radius:16px;overflow:hidden}
-table{width:100%;border-collapse:collapse;font-size:11px;min-width:920px}
+table{width:100%;border-collapse:collapse;font-size:11px;min-width:1100px}
 thead{background:#f3f4f2}
 th{padding:11px 13px;text-align:left;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(22,52,34,0.4);font-weight:700;border-bottom:1px solid rgba(22,52,34,0.06);white-space:nowrap}
 td{padding:10px 13px;color:#4c644e;border-bottom:1px solid rgba(22,52,34,0.04);vertical-align:top;line-height:1.5}
@@ -793,12 +793,12 @@ function SpecTable({rows,meta}){
                     <td style={{color:"#4c644e",fontWeight:600}}>{num}</td>
                     <td style={{fontWeight:600,color:"#163422"}}>{r.commonName}</td>
                     <td className="td-sci">{r.scientificName||"—"}</td>
-                    <td>{r.maxHeight||"—"}</td><td>{r.controllableHeight||"—"}</td>
-                    <td>{r.spread||"—"}</td><td>{r.rootDepth||"—"}</td>
-                    <td>{r.water||"—"}</td><td>{r.bloomColor||"—"}</td>
-                    <td>{r.bloomSeason||"—"}</td><td>{r.foliageColor||"—"}</td>
-                    <td>{r.form||"—"}</td>
-                    <td>{r.evergreen===true?"Evergreen":r.evergreen===false?"Deciduous":"—"}</td>
+                    <td style={{whiteSpace:'nowrap'}}>{r.maxHeight||"—"}</td><td style={{whiteSpace:'nowrap'}}>{r.controllableHeight||"—"}</td>
+                    <td style={{whiteSpace:'nowrap'}}>{r.spread||"—"}</td><td style={{whiteSpace:'nowrap'}}>{r.rootDepth||"—"}</td>
+                    <td style={{whiteSpace:'nowrap'}}>{r.water||"—"}</td><td>{r.bloomColor||"—"}</td>
+                    <td style={{whiteSpace:'nowrap'}}>{r.bloomSeason||"—"}</td><td>{r.foliageColor||"—"}</td>
+                    <td style={{whiteSpace:'nowrap'}}>{r.form||"—"}</td>
+                    <td style={{whiteSpace:'nowrap'}}>{r.evergreen===true?"Evergreen":r.evergreen===false?"Deciduous":"—"}</td>
                     <td><div className="td-traits">{(r.traits||[]).map((t,k)=><span key={k} className="td-t">{t}</span>)}</div></td>
                   </tr>
                 );})}
