@@ -58,7 +58,7 @@ export default function Login({ session, onEnterApp }) {
   }
 
   return (
-    <div style={{minHeight:'100vh',background:'#f8f7f2',fontFamily:"'Plus Jakarta Sans',sans-serif",position:'relative',overflow:'hidden',scrollBehavior:'smooth'}}>
+    <div style={{minHeight:'100vh',background:'#f8f7f2',fontFamily:"'Plus Jakarta Sans',sans-serif",position:'relative',overflowX:'hidden',scrollBehavior:'smooth'}}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         @import url('https://fonts.cdnfonts.com/css/garet');
@@ -90,7 +90,7 @@ export default function Login({ session, onEnterApp }) {
         .lp-hiw{background:#f8f7f2;padding:100px 64px;border-top:1px solid rgba(0,0,0,0.07)}
         .lp-hiw-intro{max-width:640px;margin:0 auto 72px;text-align:center}
         .lp-hiw-intro p{font-size:15px;color:rgba(26,26,26,0.45);line-height:1.85;font-weight:300;letter-spacing:.01em}
-        .lp-hiw-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,5vw,68px);font-style:italic;font-weight:400;color:#1a1a1a;margin-bottom:64px;text-align:center;letter-spacing:-.02em}
+        .lp-hiw-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,68px);font-style:italic;font-weight:400;color:#1a1a1a;margin-bottom:64px;text-align:center;letter-spacing:-.02em;overflow-wrap:break-word;word-break:break-word}
         .lp-hiw-cols{display:grid;grid-template-columns:repeat(3,1fr);max-width:1000px;margin:0 auto}
         .lp-hiw-col{padding:0 48px;position:relative}
         .lp-hiw-col+.lp-hiw-col::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.1)}
@@ -125,6 +125,44 @@ export default function Login({ session, onEnterApp }) {
         .lp-footer{background:#eeecea;padding:48px 64px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(0,0,0,0.08)}
         .lp-footer-logo{font-family:'Garet',sans-serif;font-size:16px;font-weight:400;font-style:normal;color:rgba(26,26,26,0.5)}
         .lp-footer-copy{font-size:10px;letter-spacing:.1em;color:rgba(26,26,26,0.35);font-family:'Plus Jakarta Sans',sans-serif}
+
+        /* ── Mobile Responsive ── */
+        @media(max-width:768px){
+          .lp-nav{padding:18px 24px}
+          .lp-nav-links li a{font-size:11px}
+          .lp-nav-cta{padding:8px 16px;font-size:11px}
+          .lp-hero{padding:0 24px 72px;min-height:100svh}
+          .lp-h1{font-size:clamp(44px,11vw,72px)}
+          .lp-sub{font-size:13px;max-width:100%;margin-bottom:40px}
+          .lp-scroll{display:none}
+          .lp-hiw{padding:72px 24px}
+          .lp-hiw-heading{font-size:clamp(28px,5.5vw,52px);margin-bottom:48px}
+          .lp-hiw-cols{grid-template-columns:1fr;gap:0}
+          .lp-hiw-col{padding:36px 0;border-top:1px solid rgba(0,0,0,0.08)}
+          .lp-hiw-col+.lp-hiw-col::before{display:none}
+          .lp-hiw-col:first-child{padding-left:0;border-top:none}
+          .lp-hiw-col:last-child{padding-right:0}
+          .lp-hiw-num{font-size:60px}
+          .lp-quote-section{padding:72px 24px}
+          .lp-big-quote{font-size:clamp(22px,6vw,36px)}
+          .lp-contact{padding:72px 24px}
+          .lp-contact-inner{grid-template-columns:1fr;gap:40px}
+          .lp-contact-heading{font-size:clamp(36px,9vw,56px)}
+          .lp-footer{padding:36px 24px;flex-direction:column;gap:12px;text-align:center}
+        }
+        @media(max-width:480px){
+          .lp-nav{padding:16px 20px}
+          .lp-nav-links{display:none}
+          .lp-hero{padding:0 20px 60px}
+          .lp-hiw{padding:60px 20px}
+          .lp-hiw-intro p{font-size:13px}
+          .lp-quote-section{padding:60px 20px}
+          .lp-contact{padding:60px 20px}
+          .lp-footer{padding:28px 20px}
+          .lp-btn-cta{padding:14px 28px;font-size:11px}
+          .lp-contact-form{padding:28px 20px}
+          .lp-actions{flex-direction:column;align-items:flex-start}
+        }
 
         .signin-backdrop{position:fixed;inset:0;background:rgba(10,18,10,0.55);backdrop-filter:blur(6px);z-index:1000;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease}
         @keyframes fadeIn{from{opacity:0}to{opacity:1}}

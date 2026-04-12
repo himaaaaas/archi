@@ -4,6 +4,7 @@ import { savePalette } from './palettes.js'
 import History from './History.jsx'
 import { exportToPptx } from './exportPptx.js'
 import { exportToDxf } from './exportDxf.js'
+import { exportToPdf } from './exportPdf.jsx'
 import GlobeView from './GlobeView.jsx'
 import imgSoftscape from './assets/softscape.jpeg'
 import imgHardscape from './assets/Hardscape.jpeg'
@@ -552,7 +553,7 @@ input::placeholder,textarea::placeholder{color:rgba(22,52,34,0.25)}
 
 .tbl-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
 .tbl-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;font-style:italic;color:#163422;letter-spacing:-.01em}
-.tbl-wrap{overflow-x:auto;border:1px solid rgba(22,52,34,0.08);border-radius:16px;overflow:hidden}
+.tbl-wrap{overflow-x:auto;border:1px solid rgba(22,52,34,0.08);border-radius:16px}
 table{width:100%;border-collapse:collapse;font-size:11px;min-width:1100px}
 thead{background:#f3f4f2}
 th{padding:11px 13px;text-align:left;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(22,52,34,0.4);font-weight:700;border-bottom:1px solid rgba(22,52,34,0.06);white-space:nowrap}
@@ -630,13 +631,55 @@ tr:hover td{background:rgba(22,52,34,0.015)}
 .mobile-dropdown button:hover{background:rgba(200,235,208,0.08);color:#e8f0e8}
 .hdr-nav-wrap{display:flex;align-items:center;gap:10px;position:relative}
 
-@media(max-width:600px){
-  .hdr{padding:14px 20px}.main,.res-wrap{padding:32px 16px 60px}
-  .g2,.div-cards,.harm-grid,.pt-grid{grid-template-columns:1fr}.mood-grid{grid-template-columns:1fr 1fr}
-  .cards,.hd-cards,.alt-grid{grid-template-columns:1fr}.res-title{font-size:30px}.stp-title{font-size:36px}
+@media(max-width:768px){
+  .hdr{padding:14px 20px}
+  .main{padding:24px 18px 80px}
+  .res-wrap{padding:0 16px 80px}
+  .stp-title{font-size:clamp(28px,7vw,44px)}
+  .stp-sub{font-size:13px}
+  .wizard-photo-bg,.wizard-photo-fade{display:none!important}
+  .main{max-width:100%}
+  .g2{grid-template-columns:1fr}
+  .div-cards{grid-template-columns:1fr}
+  .harm-grid{grid-template-columns:1fr}
+  .pt-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .pt-img{height:160px}
+  .mood-grid{grid-template-columns:1fr 1fr}
+  .cards{grid-template-columns:1fr}
+  .hd-cards{grid-template-columns:1fr}
+  .alt-grid{grid-template-columns:1fr 1fr}
+  .res-title{font-size:clamp(24px,6vw,36px)}
+  .res-hdr{flex-direction:column;align-items:flex-start;gap:20px}
+  .res-hdr-right{align-items:flex-start;width:100%}
+  .res-actions-primary{flex-wrap:wrap}
+  .res-actions-secondary{flex-wrap:wrap}
+  .res-stats{display:grid;grid-template-columns:1fr 1fr;overflow:visible;border-radius:12px}
+  .res-stat{border-right:none;border-bottom:1px solid rgba(22,52,34,0.07)}
+  .res-stat:nth-child(odd){border-right:1px solid rgba(22,52,34,0.07)}
+  .res-stat:last-child,.res-stat:nth-last-child(2):nth-child(odd){border-bottom:none}
+  .res-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .res-tab{padding:12px 16px;font-size:12px;white-space:nowrap}
+  .strat-txt{font-size:18px}
   .hdr-btns{display:none}
   .hdr-mobile-menu{display:flex}
-  .stp-title{font-size:38px}
+  .step-dots{padding:0 20px 24px}
+  .nav{margin-top:36px}
+  .btn-next{padding:12px 28px}
+  .tbl-header-row{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:480px){
+  .hdr{padding:12px 16px}
+  .main{padding:20px 14px 80px}
+  .res-wrap{padding:0 14px 60px}
+  .pt-grid{grid-template-columns:1fr}
+  .mood-grid{grid-template-columns:1fr}
+  .alt-grid{grid-template-columns:1fr}
+  .res-stats{grid-template-columns:1fr 1fr}
+  .res-stat-val{font-size:20px}
+  .res-tab{padding:10px 12px;font-size:11px}
+  .strat-txt{font-size:16px}
+  .btn-gen{padding:13px 32px;font-size:12px}
+  .stp-title{font-size:clamp(24px,8vw,36px)}
 }`;
 
 const togArr=(a,v)=>a.includes(v)?a.filter(x=>x!==v):[...a,v];
@@ -779,7 +822,6 @@ function SpecTable({rows,meta}){
     <div>
       <div className="tbl-header-row">
         <div className="tbl-title">Full Specification Table</div>
-        <button className="btn-pdf" onClick={handlePdf}>↓ Download as PDF</button>
       </div>
       <div className="tbl-wrap">
         <table>
@@ -820,6 +862,7 @@ export default function App({ session, onGoHome }){
   const[showHistory,setShowHistory]=useState(false);
   const[isSaving,setIsSaving]=useState(false);
   const[isSaved,setIsSaved]=useState(false);
+  const[pdfStatus,setPdfStatus]=useState(null); // null | 'Fetching plant images…' | 'Building PDF…'
   const [generatingBrief, setGeneratingBrief] = useState(false)
   const[replacingPlant,setReplacingPlant]=useState(null);
   const[stepVisible,setStepVisible]=useState(true);
@@ -1505,6 +1548,14 @@ Write only the brief text, no headings or labels.`
                 <div className="res-actions-primary">
                   <button onClick={handleSave} disabled={isSaving||isSaved} className="btn-save">
                     {isSaving?'Saving…':isSaved?'✓ Saved':'Save'}
+                  </button>
+                  <button
+                    className="btn-pdf"
+                    disabled={!!pdfStatus}
+                    onClick={() => exportToPdf(editableResult, form, setPdfStatus)}
+                    style={pdfStatus ? {opacity:0.7,cursor:'not-allowed'} : {}}
+                  >
+                    {pdfStatus ? <><span className="btn-spinner"/>{pdfStatus}</> : '↓ PDF'}
                   </button>
                   <button className="btn-reset" onClick={()=>{setResult(null);setEditableResult(null);setStep(0);setIsSaved(false);}}>← New</button>
                 </div>
