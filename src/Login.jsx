@@ -209,12 +209,6 @@ export default function Login({ session, onEnterApp }) {
           <div>
             <h2 className="lp-contact-heading">Talk<br/>to us.</h2>
             <p className="lp-contact-desc">Ready to transform your design workflow? Our team of horticulturalists and developers are here to help you grow.</p>
-            <div className="lp-contact-info">
-              <div className="lp-contact-info-item">
-                <div className="lp-contact-info-icon">✉</div>
-                hello@landpal.design
-              </div>
-            </div>
           </div>
           <div className="lp-contact-form">
             {contactStatus === 'sent' ? (
