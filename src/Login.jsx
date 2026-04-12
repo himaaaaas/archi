@@ -34,13 +34,10 @@ export default function Login({ session, onEnterApp }) {
     setContactError('')
     setContactStatus('sending')
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), email: email.trim(), message: message.trim() }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Something went wrong.')
+      const { error } = await supabase
+        .from('feedback')
+        .insert({ name: name.trim(), email: email.trim(), message: message.trim() })
+      if (error) throw new Error(error.message)
       setContactStatus('sent')
     } catch (err) {
       setContactError(err.message || 'Failed to send. Please try again.')
