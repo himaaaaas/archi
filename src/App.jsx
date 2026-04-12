@@ -102,7 +102,7 @@ const COUNTRY_SUB_REGIONS = {
 };
 
 const REGION_HINTS = {
-  "Greater Cairo / Nile Valley":"🌿 Hot semi-arid, ~25mm rainfall. Alluvial Nile soils — fertile but often compacted. Dust and heat are key stressors.",
+  "Greater Cairo / Nile Valley":"Hot semi-arid, ~25mm rainfall. Alluvial Nile soils — fertile but often compacted. Dust and heat are key stressors.",
   "North Coast (Mediterranean)":"⚠ Sandy, saline soils — salt-tolerant species essential. ~150–200mm winter rain. Strong coastal winds.",
   "Red Sea Coast":"☀ Extremely hot, near-zero rainfall, intense salt air. Only the most drought and salt tolerant species will survive.",
   "Sinai Peninsula":"🏜 Arid rocky, shallow alkaline soils. Under 50mm/yr. Desert-adapted species only — some oasis plants near wadis.",
@@ -111,74 +111,74 @@ const REGION_HINTS = {
   "Western Desert Oases (Siwa, Bahariya)":"🏜 True desert with isolated groundwater. Extreme heat and aridity. Date palms and oasis-adapted species around water sources.",
   "Riyadh (Najd Plateau)":"☀ Extreme continental desert — 45°C+ summers, cold winters with occasional frost. ~100mm/yr. Drought-tolerant species essential.",
   "Jeddah / Hejaz Coast":"⚠ Hot, humid, salty coastal air year-round. Low rainfall but high atmospheric moisture. Salt and humidity tolerance critical.",
-  "Asir Highlands":"🌿 Significantly cooler and wetter than rest of Saudi Arabia (up to 500mm/yr). Broader palette including some temperate species.",
+  "Asir Highlands":"Significantly cooler and wetter than rest of Saudi Arabia (up to 500mm/yr). Broader palette including some temperate species.",
   "Eastern Province (Al-Hasa)":"🌡 Extreme heat and dust, high Gulf humidity. Saline groundwater. Drought and humidity tolerance important.",
   "Dubai":"🌡 Extreme summer heat (48°C+), high coastal humidity, salt air. ~75mm/yr. Salt, heat, and drought tolerance essential.",
   "Abu Dhabi":"🌡 Sandy/gravelly soils, high salt content, extreme heat. Only heat-adapted, drought-tolerant, salt-tolerant species.",
   "Al Ain / Inland Desert":"☀ Hot and dry, lower humidity than coast. Rocky desert soils. Palms, desert shrubs, irrigated specimen trees.",
-  "Fujairah / East Coast":"🌿 More rainfall (~150mm/yr), lower humidity, cooler. Wadi vegetation and some subtropical species viable.",
+  "Fujairah / East Coast":"More rainfall (~150mm/yr), lower humidity, cooler. Wadi vegetation and some subtropical species viable.",
   "Doha / Coastal":"⚠ Extreme heat with very high humidity. One of the most demanding climates. Nearly all planting requires full irrigation.",
   "Coastal / Urban":"⚠ Hot coastal Gulf climate — high humidity, saline soils and air, intense summer heat.",
   "Coastal Island":"⚠ Gulf island climate — surrounded by hot saline water, high humidity, sandy soils with salt intrusion.",
   "Muscat / Northern Coast":"🌡 Very hot and humid coastal. Rocky terrain nearby. Salt and heat-tolerant species.",
   "Salalah (Dhofar — Monsoon Zone)":"🌧 Unique monsoon season (June–September) creates lush subtropical conditions — tropical species viable here.",
-  "Hajar Mountains":"🌿 Cooler at elevation, higher rainfall. Some temperate species possible. Rocky, well-draining soils.",
-  "Amman / Highlands":"🌿 Mediterranean-influenced highland — mild, 300–500mm rainfall. Wide palette including Mediterranean and temperate species.",
+  "Hajar Mountains":"Cooler at elevation, higher rainfall. Some temperate species possible. Rocky, well-draining soils.",
+  "Amman / Highlands":"Mediterranean-influenced highland — mild, 300–500mm rainfall. Wide palette including Mediterranean and temperate species.",
   "Jordan Valley (Rift Valley)":"☀ Hot and arid below sea level. Desert and steppe species. Date palms and drought-tolerant Mediterranean plants.",
   "Aqaba / Southern Coast":"⚠ Desert coastal — hot, low rainfall, salt air from Red Sea.",
   "Wadi Rum Desert":"🏜 True hyper-arid desert. Only most resilient desert species. Strong xerophyte design statement.",
-  "Beirut / Coast":"🌿 Mediterranean climate — mild wet winters, hot dry summers. Wide palette — Mediterranean, subtropical, ornamental species.",
-  "Bekaa Valley":"🌿 Continental-Mediterranean — hot dry summers, cold winters with snow possible. Broader palette with some temperate species.",
+  "Beirut / Coast":"Mediterranean climate — mild wet winters, hot dry summers. Wide palette — Mediterranean, subtropical, ornamental species.",
+  "Bekaa Valley":"Continental-Mediterranean — hot dry summers, cold winters with snow possible. Broader palette with some temperate species.",
   "Gaza / Coastal Strip":"⚠ Mediterranean coastal with salt air, sandy soils. Salt-tolerant and Mediterranean species preferred.",
-  "Coastal (Casablanca, Rabat)":"🌿 Atlantic-Mediterranean transition — mild, ~400mm rainfall, some salt air. Good general Mediterranean palette.",
+  "Coastal (Casablanca, Rabat)":"Atlantic-Mediterranean transition — mild, ~400mm rainfall, some salt air. Good general Mediterranean palette.",
   "Marrakech / Pre-Sahara":"☀ Hot semi-arid, ~230mm rainfall. Traditional Islamic garden plants thrive — oleanders, palms, citrus, bougainvillea.",
-  "Atlas Mountains":"🌿 Cooler and wetter at altitude — some temperate species possible. Rocky soils, dramatic terrain.",
+  "Atlas Mountains":"Cooler and wetter at altitude — some temperate species possible. Rocky soils, dramatic terrain.",
   "Saharan Fringe (Draa, Ziz)":"🏜 Hyper-arid desert edge. Date palms, acacias, tamarisks only.",
-  "Tunis / Northern Coast":"🌿 Classic Mediterranean climate — mild, ~460mm rainfall. Good range of Mediterranean ornamentals.",
+  "Tunis / Northern Coast":"Classic Mediterranean climate — mild, ~460mm rainfall. Good range of Mediterranean ornamentals.",
   "Southern Desert (Djerba, Tozeur)":"🏜 Hot desert, sandy soils. Desert-adapted and oasis species only.",
-  "Cape Town / Western Cape (Mediterranean)":"🌿 True Mediterranean — dry hot summers, cool wet winters, ~500mm. Unique fynbos biome. Wide drought-tolerant palette.",
-  "Johannesburg / Highveld":"🌿 High altitude (1700m) — warm summers with thunderstorms, dry mild winters. Frost possible. Good diverse palette.",
+  "Cape Town / Western Cape (Mediterranean)":"True Mediterranean — dry hot summers, cool wet winters, ~500mm. Unique fynbos biome. Wide drought-tolerant palette.",
+  "Johannesburg / Highveld":"High altitude (1700m) — warm summers with thunderstorms, dry mild winters. Frost possible. Good diverse palette.",
   "Durban / KwaZulu-Natal (Subtropical)":"🌴 Warm subtropical coastal — high humidity, good rainfall. Lush tropical and subtropical palette.",
   "Karoo / Semi-arid":"🏜 Hot semi-arid interior. Unique succulent karoo biome. Excellent for xeriscape and succulent-based planting.",
-  "Nairobi / Central Highland":"🌿 Equatorial highland at 1700m — mild year-round (18–24°C), bimodal rains. Very wide palette.",
+  "Nairobi / Central Highland":"Equatorial highland at 1700m — mild year-round (18–24°C), bimodal rains. Very wide palette.",
   "Mombasa / Coastal":"🌴 Hot humid tropical coast — high rainfall, salt air. Wide range of coastal and tropical plants.",
   "Dar es Salaam / Coast":"🌴 Hot and humid tropical coast. High rainfall. Lush tropical palette.",
   "Andalusia / Deep South":"☀ Hot semi-arid Mediterranean — very hot dry summers, mild winters. ~550mm. Drought-tolerant Mediterranean and exotic species.",
-  "Mediterranean Coast (Valencia, Catalonia)":"🌿 Classic Mediterranean — warm, ~400–500mm rainfall. Citrus, palms, lavender, rosemary, olive trees all thrive.",
-  "Canary Islands":"🌿 Year-round mild subtropical — unique microclimate. Wide palette including tropical and desert species.",
-  "Mediterranean South (Provence, Languedoc)":"🌿 Hot Mediterranean summers, cool winters. ~600mm. Lavender, herbs, olive, cypress — classic Provençal palette.",
-  "Paris / Northern":"🌿 Temperate oceanic — cool summers, cold winters, ~600mm. Wide temperate palette, deciduous trees dominant.",
+  "Mediterranean Coast (Valencia, Catalonia)":"Classic Mediterranean — warm, ~400–500mm rainfall. Citrus, palms, lavender, rosemary, olive trees all thrive.",
+  "Canary Islands":"Year-round mild subtropical — unique microclimate. Wide palette including tropical and desert species.",
+  "Mediterranean South (Provence, Languedoc)":"Hot Mediterranean summers, cool winters. ~600mm. Lavender, herbs, olive, cypress — classic Provençal palette.",
+  "Paris / Northern":"Temperate oceanic — cool summers, cold winters, ~600mm. Wide temperate palette, deciduous trees dominant.",
   "Sicily / Deep South":"☀ Hot Mediterranean — very dry summers, mild winters. Drought-tolerant species, citrus, agave, palms.",
   "Athens / Attica":"☀ Hot semi-arid Mediterranean — very dry summers. ~380mm. Olive, pine, lavender, rockrose.",
   "Crete":"☀ Similar to Athens but wetter (~500mm) with more wind. Rich local flora. Salt air on coasts.",
-  "London / Southeast England":"🌿 Cool oceanic — mild, cloudy, ~600mm well-distributed. Very wide temperate palette.",
-  "Scotland / Highland":"🌿 Cool, wet, and windy — ~1000mm+ rainfall. Heathers, conifers, hardy perennials. Cold-hardy species essential.",
+  "London / Southeast England":"Cool oceanic — mild, cloudy, ~600mm well-distributed. Very wide temperate palette.",
+  "Scotland / Highland":"Cool, wet, and windy — ~1000mm+ rainfall. Heathers, conifers, hardy perennials. Cold-hardy species essential.",
   "Delhi / North India":"🌡 Semi-arid with monsoon — extremely hot summers (45°C+), cool dry winters, ~700mm seasonal rainfall.",
   "Rajasthan / Arid West":"🏜 Hot desert — very low rainfall (~300mm), extreme heat. Desert-adapted Indian species.",
   "Mumbai / West Coast":"🌧 Tropical monsoon — extremely wet June–September (~2400mm/yr). Lush tropical palette.",
   "Kerala / Tropical South":"🌴 Tropical rainforest — very high rainfall (>3000mm/yr), high humidity. Richest tropical planting climate in India.",
-  "Bangalore / Deccan Plateau":"🌿 Pleasant highland tropical — moderate rainfall, mild temperatures. Very wide ornamental palette.",
+  "Bangalore / Deccan Plateau":"Pleasant highland tropical — moderate rainfall, mild temperatures. Very wide ornamental palette.",
   "Bangkok / Central":"🌴 Hot humid tropical — monsoonal. Lush tropical palette with excellent flowering trees.",
-  "Perth / Southwest (Mediterranean)":"🌿 True Mediterranean — hot dry summers, mild wet winters, ~730mm. Unique Southwest Australian flora.",
-  "Sydney / NSW":"🌿 Humid subtropical — warm year-round, ~1200mm. Very wide palette from temperate to subtropical.",
-  "Melbourne / Victoria":"🌿 Oceanic temperate — cool, changeable, ~650mm. Wide temperate palette. Good for deciduous trees.",
-  "Brisbane / Southeast Queensland":"🌿 Subtropical — warm and humid, ~1000mm. Jacarandas, frangipani, subtropical shrubs.",
+  "Perth / Southwest (Mediterranean)":"True Mediterranean — hot dry summers, mild wet winters, ~730mm. Unique Southwest Australian flora.",
+  "Sydney / NSW":"Humid subtropical — warm year-round, ~1200mm. Very wide palette from temperate to subtropical.",
+  "Melbourne / Victoria":"Oceanic temperate — cool, changeable, ~650mm. Wide temperate palette. Good for deciduous trees.",
+  "Brisbane / Southeast Queensland":"Subtropical — warm and humid, ~1000mm. Jacarandas, frangipani, subtropical shrubs.",
   "Tropical North (Darwin, Cairns)":"🌴 Monsoonal tropical — very wet season followed by dry. Tropical species only.",
   "Alice Springs / Arid Centre":"🏜 Hot arid desert — extreme temperatures, ~280mm rainfall. Drought-tolerant native and adapted species only.",
-  "Auckland / North Island (Subtropical)":"🌿 Warm oceanic/subtropical — mild, ~1200mm. Wide palette from temperate to subtropical.",
-  "California Coast / Mediterranean":"🌿 True Mediterranean — mild coastal, dry summers, ~500mm. Mediterranean, drought-tolerant, and California native species.",
+  "Auckland / North Island (Subtropical)":"Warm oceanic/subtropical — mild, ~1200mm. Wide palette from temperate to subtropical.",
+  "California Coast / Mediterranean":"True Mediterranean — mild coastal, dry summers, ~500mm. Mediterranean, drought-tolerant, and California native species.",
   "Arizona / Sonoran Desert":"🏜 Hot desert — extreme heat (45°C+), ~190mm. Native saguaro, palo verde, desert willow ecosystem. Xeriscape only.",
   "South Florida / Subtropical":"🌴 Tropical/subtropical — hot and humid year-round, ~1500mm. Full tropical palette. Salt air near coast.",
   "Texas Gulf Coast":"⚠ Humid subtropical with hurricane risk — high heat and humidity, salt air. Flood and salt tolerance important.",
-  "São Paulo / Southeast":"🌿 Subtropical highland — mild temperatures, ~1400mm distributed year-round. Very wide ornamental palette.",
-  "Santiago / Mediterranean Central":"🌿 Mediterranean — dry hot summers, cool wet winters, ~280mm. Mediterranean and Chilean native flora.",
+  "São Paulo / Southeast":"Subtropical highland — mild temperatures, ~1400mm distributed year-round. Very wide ornamental palette.",
+  "Santiago / Mediterranean Central":"Mediterranean — dry hot summers, cool wet winters, ~280mm. Mediterranean and Chilean native flora.",
   "Northern Desert (Atacama)":"🏜 Extreme hyper-arid — one of the driest places on Earth. Only highly specialised xeric species.",
-  "General Mediterranean":"🌿 Dry hot summers, mild wet winters, 300–700mm. Wide palette: olive, lavender, rosemary, citrus, bougainvillea.",
+  "General Mediterranean":"Dry hot summers, mild wet winters, 300–700mm. Wide palette: olive, lavender, rosemary, citrus, bougainvillea.",
   "Tropical Rainforest (year-round rain)":"🌴 Year-round heat and high rainfall. Maximum tropical diversity. Focus on drainage management.",
   "Tropical Savanna / Wet-Dry":"🌴 Distinct wet and dry seasons. Plants must handle waterlogging AND prolonged drought.",
   "Hot Desert (< 250mm/yr, high temp)":"🏜 Full irrigation always required. Only drought-tolerant, heat-adapted species. Xeriscape is the appropriate style.",
-  "Maritime Temperate (mild, rainy)":"🌿 Cool, wet, and mild year-round. Very wide temperate palette — lawns, deciduous trees, roses, hedges all excel.",
-  "Humid Subtropical (hot summers, mild winters)":"🌿 Hot humid summers, mild winters. Wide palette including temperate and subtropical species.",
+  "Maritime Temperate (mild, rainy)":"Cool, wet, and mild year-round. Very wide temperate palette — lawns, deciduous trees, roses, hedges all excel.",
+  "Humid Subtropical (hot summers, mild winters)":"Hot humid summers, mild winters. Wide palette including temperate and subtropical species.",
 };
 
 const REGION_AUTO_CONDITIONS = {
@@ -279,7 +279,7 @@ const HARMONIES=[{val:"monochromatic",label:"Monochromatic",desc:"One colour fam
 const MOODS=[{val:"calm",label:"Calm & Serene",icon:"◌"},{val:"healing",label:"Healing / Therapeutic",icon:"✦"},{val:"energetic",label:"Vibrant & Energetic",icon:"◈"},{val:"warm",label:"Warm & Welcoming",icon:"◉"},{val:"romantic",label:"Romantic & Soft",icon:"◇"},{val:"formal",label:"Formal & Classic",icon:"▣"},{val:"wild",label:"Wild & Naturalistic",icon:"❋"}];
 const CONDITIONS=["Salt Tolerant","Drought Tolerant","Humidity Tolerant","Wind Resistant","Flood / Waterlogging Tolerant","Shade Tolerant","Fast Growing","Slow & Controlled Growth","Low Maintenance","Fragrant","Wildlife / Pollinator Friendly","Slope Stabilisation","Air Purifying","Edible / Productive","Non-Invasive Roots","Suitable for Children's Areas"];
 const FOLIAGE_TEXTURES=["Fine / Feathery","Medium","Bold / Coarse","Glossy","Matte","Spiky / Architectural","Weeping","Fluffy / Airy"];
-const CAT_ICONS={"Trees":"🌳","Palms & Palm-like":"🌴","Shrubs":"🌿","Ground Covers":"🍀","Climbers & Creepers":"🌱","Perennials":"🌸","Annuals":"🌼","Succulents & Cacti":"🌵","Ornamental Grasses & Sedges":"🌾","Aquatic Plants":"🪷","Hedges":"🍃"};
+const CAT_ICONS={"Trees":"🌳","Palms & Palm-like":"🌴","Shrubs":"◉","Ground Covers":"🍀","Climbers & Creepers":"🌱","Perennials":"🌸","Annuals":"🌼","Succulents & Cacti":"🌵","Ornamental Grasses & Sedges":"🌾","Aquatic Plants":"🪷","Hedges":"🍃"};
 
 const HD_CHARACTER=[{val:"natural",label:"Natural Stone",sub:"Quarried materials — granite, limestone, travertine, sandstone, basalt, slate, marble"},{val:"manufactured",label:"Manufactured / Concrete",sub:"Porcelain tiles, concrete pavers, interlocking blocks, terrazzo, exposed aggregate"},{val:"wood-composite",label:"Wood & Composites",sub:"Timber decking, WPC (wood-plastic composite), bamboo composite"},{val:"mixed",label:"Mixed Palette",sub:"Combination of natural stone and manufactured materials in different zones"}];
 const HD_ORIGIN=["Local / Regional Materials","Imported Materials","Mix of Both"];
@@ -715,7 +715,7 @@ function PlantCard({p, onRemove, onReplace}){
       <div className="pc-img-wrap">
         {imgUrl
           ? <img src={imgUrl} alt={p.commonName} loading="lazy"/>
-          : <div className="pc-img-placeholder">🌿</div>
+          : <div className="pc-img-placeholder">◈</div>
         }
       </div>
       <div className="pc-body">
@@ -787,7 +787,7 @@ function SpecTable({rows,meta}){
           <tbody>
             {groups.map(group=>(
               <React.Fragment key={"g-"+group.name}>
-                <tr className="td-cat-hdr"><td colSpan={14}>{CAT_ICONS[group.name]||"🌿"}&nbsp; {group.name} — {group.plants.length} species</td></tr>
+                <tr className="td-cat-hdr"><td colSpan={14}>{CAT_ICONS[group.name]||""}&nbsp; {group.name} — {group.plants.length} species</td></tr>
                 {group.plants.map((r,j)=>{n++;const num=n;return(
                   <tr key={group.name+j}>
                     <td style={{color:"#4c644e",fontWeight:600}}>{num}</td>
@@ -1525,7 +1525,7 @@ Write only the brief text, no headings or labels.`
             {/* Tabs — only when both exist */}
             {hasSoft&&hasHard&&(
               <div className="res-tabs">
-                <button className={`res-tab${activeTab==='softscape'?' active':''}`} onClick={()=>setActiveTab('softscape')}>🌿 Softscape</button>
+                <button className={`res-tab${activeTab==='softscape'?' active':''}`} onClick={()=>setActiveTab('softscape')}>Softscape</button>
                 <button className={`res-tab${activeTab==='hardscape'?' active':''}`} onClick={()=>setActiveTab('hardscape')}>◈ Hardscape</button>
               </div>
             )}
@@ -1534,13 +1534,13 @@ Write only the brief text, no headings or labels.`
               <button onClick={()=>setError(null)} style={{background:'none',border:'none',color:'rgba(220,120,100,0.7)',cursor:'pointer',fontSize:16,lineHeight:1,padding:'0 0 0 12px'}}>✕</button>
             </div>}
             {(!hasHard||activeTab==='softscape')&&hasSoft&&<>
-              {hasHard&&<div className="sec-banner">🌿 Softscape</div>}
+              {hasHard&&<div className="sec-banner">Softscape</div>}
               {editableResult?.strategy&&<div className="strat-box"><div className="strat-lbl">Design Strategy & Rationale</div><div className="strat-txt">{editableResult.strategy}</div></div>}
               {editableResult?.feasibilityNotes&&editableResult.feasibilityNotes!=="null"&&<div className="feasibility-box"><div className="feasibility-lbl">⚠ Feasibility Notes</div><div className="feasibility-txt">{editableResult.feasibilityNotes}</div></div>}
               {(editableResult?.categories||[]).map((cat,i)=>(
                 <div key={i}>
                   <div className="cat-sec">
-                    <div className="cat-hdr"><span className="cat-icon">{CAT_ICONS[cat.name]||"🌿"}</span><span className="cat-name">{cat.name}</span><span className="cat-cnt">{cat.plants?.length} plants</span></div>
+                    <div className="cat-hdr"><span className="cat-icon">{CAT_ICONS[cat.name]||""}</span><span className="cat-name">{cat.name}</span><span className="cat-cnt">{cat.plants?.length} plants</span></div>
                     <div className="cards">
                       {(cat.plants||[]).map((p,j)=>(
                         <PlantCard
@@ -1641,7 +1641,7 @@ Write only the brief text, no headings or labels.`
       <div className="app" ref={topRef}>
         <header className="hdr"><div className="hdr-brand"><div><div className="hdr-name" onClick={()=>{setError(null);goToStep(0);}} style={{cursor:'pointer'}}>LandPal.</div></div></div></header>
         <div className="err-page">
-          <div className="err-page-icon">🌿</div>
+          <div className="err-page-icon">⚠</div>
           <div className="err-page-title">Something went wrong</div>
           <div className="err-page-msg">{error}</div>
           <div className="err-page-actions">
