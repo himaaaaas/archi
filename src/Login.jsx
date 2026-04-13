@@ -246,7 +246,7 @@ export default function Login({ session, onEnterApp }) {
         <div className="lp-contact-inner">
           <div>
             <h2 className="lp-contact-heading">Send<br/>Message.</h2>
-            <p className="lp-contact-desc">Ready to transform your design workflow? Our team of horticulturalists and developers are here to help you grow.</p>
+            <p className="lp-contact-desc">Ready to transform your design workflow? Our team of landscape architects, horticulturalists and developers are here to help you grow.</p>
           </div>
           <div className="lp-contact-form">
             {contactStatus === 'sent' ? (
