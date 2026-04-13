@@ -1412,15 +1412,15 @@ Write only the brief text, no headings or labels.`
       return(
         <>
             <div className="stp-title">Colour, mood &<br/><em>seasonality</em></div>
-          <div className="stp-desc">Set harmony and mood first — this filters the colour picker to only show what works together.</div>
+          <div className="stp-desc">Set harmony first — this filters the colour picker to only show what works together.</div>
           <div className="sect"><div className="sl">1 — Colour Harmony</div><div className="harm-grid">{HARMONIES.map(h=><div key={h.val} className={`harm-card ${form.harmony===h.val?"on":""}`} onClick={()=>setHarmony(h.val)}><div className="harm-name">{h.label}</div><div className="harm-desc">{h.desc}</div></div>)}</div></div>
-          <div className="sect"><div className="sl">2 — Mood / Atmosphere</div><div className="mood-grid">{MOODS.map(m=><div key={m.val} className={`mood-card ${form.mood===m.val?"on":""}`} onClick={()=>set("mood",m.val)}><span className="mood-icon">{m.icon}</span><span className="mood-lbl">{m.label}</span></div>)}</div></div>
           <div className="sect">
-            <div className="sl">3 — Colours</div>
+            <div className="sl">2 — Colours</div>
             {form.harmony&&<div className="colour-hint">{hints[form.harmony]}</div>}
             <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(80px,1fr))',gap:10,marginTop:4}}>{ALL_COLORS_ORDER.map(c=>{const avail=availSet.includes(c),on=form.colors.includes(c);const hex=COLOR_HEX[c]||'#888';const isGrad=hex.startsWith('linear');return <div key={c} className={`ctag ${on?"on":""} ${!avail?"dim":""}`} onClick={()=>avail&&toggleColor(c)}><span className="ctag-swatch" style={isGrad?{backgroundImage:hex}:{background:hex}}/><span className="ctag-name">{c}</span></div>;})}</div>
             {form.colors.length>0&&<div style={{marginTop:8}}><button className="link-btn" onClick={()=>set("colors",[])}>Clear colours</button></div>}
           </div>
+          <div className="sect"><div className="sl">3 — Mood / Atmosphere</div><div className="mood-grid">{MOODS.map(m=><div key={m.val} className={`mood-card ${form.mood===m.val?"on":""}`} onClick={()=>set("mood",m.val)}><span className="mood-icon">{m.icon}</span><span className="mood-lbl">{m.label}</span></div>)}</div></div>
           <div className="sect"><div className="sl">Blooming Target Seasons</div><div className="tags">{["Spring (Mar–May)","Summer (Jun–Aug)","Autumn (Sep–Nov)","Winter (Dec–Feb)","Year-round"].map(s=><div key={s} className={`tag ${form.bloomingTarget.includes(s)?"on":""}`} onClick={()=>tog("bloomingTarget",s)}>{s}</div>)}</div></div>
           <div className="sect"><div className="sl">Evergreen / Deciduous Preference</div><div className="tags">{["Fully Evergreen","Mostly Evergreen","Mix of Both","Mostly Deciduous","No Preference"].map(v=><div key={v} className={`tag ${form.evergreen===v?"on":""}`} onClick={()=>set("evergreen",v)}>{v}</div>)}</div></div>
           <div className="sect"><div className="sl">Preferred Foliage Texture</div><div className="tags">{FOLIAGE_TEXTURES.map(t=><div key={t} className={`tag ${form.foliageTexture.includes(t)?"on":""}`} onClick={()=>tog("foliageTexture",t)}>{t}</div>)}</div></div>
