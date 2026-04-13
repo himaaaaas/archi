@@ -292,7 +292,7 @@ export default function Login({ session, onEnterApp }) {
                   onClick={handleContactSubmit}
                   style={contactStatus === 'sending' ? {opacity:0.6,cursor:'not-allowed'} : {}}
                 >
-                  {contactStatus === 'sending' ? 'Sending…' : 'Talk to us'}
+                  {contactStatus === 'sending' ? 'Sending…' : 'Send Message'}
                 </button>
                 {contactError && (
                   <div style={{fontSize:12,color:'rgba(180,30,30,0.85)',marginTop:4,lineHeight:1.6}}>
