@@ -881,7 +881,8 @@ export default function App({ session, onGoHome }){
   const[showHistory,setShowHistory]=useState(false);
   const[isSaving,setIsSaving]=useState(false);
   const[isSaved,setIsSaved]=useState(false);
-  const[pdfStatus,setPdfStatus]=useState(null); // null | 'Fetching plant images…' | 'Building PDF…'
+  const[pdfStatus,setPdfStatus]=useState(null);
+  const[pptxStatus,setPptxStatus]=useState(null);
   const [generatingBrief, setGeneratingBrief] = useState(false)
   const[replacingPlant,setReplacingPlant]=useState(null);
   const[stepVisible,setStepVisible]=useState(true);
@@ -1576,11 +1577,18 @@ Write only the brief text, no headings or labels.`
                   >
                     {pdfStatus ? <><span className="btn-spinner"/>{pdfStatus}</> : '↓ PDF'}
                   </button>
+                  <button
+                    className="btn-pdf"
+                    disabled={!!pptxStatus}
+                    onClick={() => exportToPptx(editableResult, form, setPptxStatus)}
+                    style={pptxStatus ? {opacity:0.7,cursor:'not-allowed'} : {}}
+                  >
+                    {pptxStatus ? <><span className="btn-spinner"/>{pptxStatus}</> : '↓ PPTX'}
+                  </button>
                   <button className="btn-reset" onClick={()=>{setResult(null);setEditableResult(null);setStep(0);setIsSaved(false);}}>← New</button>
                 </div>
                 <div className="res-actions-secondary">
                   <button onClick={() => setShowHistory(true)} className="btn-action">History</button>
-                  <button onClick={() => exportToPptx(editableResult, form)} className="btn-action">↓ PPTX</button>
                   <button onClick={() => exportToDxf(editableResult, form)} className="btn-action">↓ DXF</button>
                 </div>
               </div>

@@ -40,12 +40,14 @@ async function fetchPlantImage(scientificName) {
   }
 }
 
-export async function exportToPptx(result, form) {
+export async function exportToPptx(result, form, onProgress) {
+  onProgress?.('Fetching plant images…')
+
   const prs = new pptxgen()
   prs.layout = 'LAYOUT_WIDE'
-  prs.title = `Land AI — ${form.country} ${form.projectType}`
+  prs.title = `LandPal — ${form.country} ${form.projectType}`
 
-  const projectTitle = [form.country, form.region, form.projectType]
+  const projectTitle = [form.country, form.region?.replace('__c:',''), form.projectType]
     .filter(Boolean).join(' · ')
   const today = new Date().toLocaleDateString('en-GB', {
     day: 'numeric', month: 'long', year: 'numeric'
@@ -218,5 +220,7 @@ export async function exportToPptx(result, form) {
   }
 
   // Save the file
-  await prs.writeFile({ fileName: `Land AI — ${projectTitle}.pptx` })
+  onProgress?.('Building PPTX…')
+  await prs.writeFile({ fileName: `LandPal — ${projectTitle}.pptx` })
+  onProgress?.(null)
 }
