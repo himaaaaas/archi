@@ -683,6 +683,25 @@ tr:hover td{background:rgba(22,52,34,0.015)}
 }`;
 
 const togArr=(a,v)=>a.includes(v)?a.filter(x=>x!==v):[...a,v];
+
+function friendlyError(msg=''){
+  const m=(msg||'').toLowerCase();
+  if(m.includes('rate_limit')||m.includes('rate limit')||m.includes('tokens per minute'))
+    return 'Our servers are a bit busy right now. Please wait a moment and try again.';
+  if(m.includes('service_unavailable')||m.includes('credit')||m.includes('balance')||m.includes('billing'))
+    return 'Service temporarily unavailable. Please try again later.';
+  if(m.includes('upstream_error')||m.includes('server_error')||m.includes('502')||m.includes('500'))
+    return 'Something went wrong on our end. Please try again.';
+  if(m.includes('too long')||m.includes('diversity'))
+    return 'Your selection is quite detailed. Try reducing Diversity to Moderate or Minimal and try again.';
+  if(m.includes('network')||m.includes('fetch')||m.includes('failed to fetch'))
+    return 'Connection issue. Please check your internet and try again.';
+  if(m.includes('timeout')||m.includes('timed out'))
+    return 'The request took too long. Please try again.';
+  if(m.includes('invalid json')||m.includes('unexpected token'))
+    return 'Something went wrong. Please try again.';
+  return 'Something went wrong. Please try again.';
+}
 function Bdg({text,type="g"}){return <span className={`bp bp-${type}`}>{text}</span>;}
 function ColorDot({c}){const v=COLOR_HEX[c]||"#888";const g=v.startsWith("linear");return <span className="cdot" style={{background:g?undefined:v,backgroundImage:g?v:undefined}}/>;}
 
@@ -1163,7 +1182,7 @@ Write only the brief text, no headings or labels.`
     if (data.text) set('brief', data.text.trim())
     else throw new Error('No text returned from API')
   } catch (e) {
-    setError('Auto-generate failed: ' + e.message)
+    setError(friendlyError(e.message))
   } finally {
     setGeneratingBrief(false)
   }
@@ -1219,7 +1238,7 @@ Write only the brief text, no headings or labels.`
       setResult(combined);
       setEditableResult(combined);
       setIsSaved(false);
-    }catch(e){setError("Generation failed: "+e.message);}
+    }catch(e){setError(friendlyError(e.message));}
     finally{setLoading(false);}
   };
 

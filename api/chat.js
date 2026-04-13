@@ -37,12 +37,28 @@ export default async function handler(req, res) {
       }),
     });
 
-    const data = await anthropicRes.json();
+    // Safely parse response — Anthropic occasionally returns plain text on errors
+    let data;
+    try {
+      data = await anthropicRes.json();
+    } catch {
+      const raw = await anthropicRes.text().catch(() => "");
+      console.error("Non-JSON response from Anthropic:", raw.slice(0, 200));
+      return res.status(502).json({ error: "upstream_error" });
+    }
 
     if (!anthropicRes.ok) {
-      return res.status(anthropicRes.status).json({
-        error: data?.error?.message || "Anthropic API error",
-      });
+      const msg = data?.error?.message || "";
+      console.error("Anthropic API error:", anthropicRes.status, msg);
+
+      // Map to internal error codes — never leak billing/key details to client
+      if (anthropicRes.status === 429 || msg.includes("rate limit")) {
+        return res.status(429).json({ error: "rate_limit" });
+      }
+      if (msg.includes("credit") || msg.includes("balance") || msg.includes("billing")) {
+        return res.status(402).json({ error: "service_unavailable" });
+      }
+      return res.status(502).json({ error: "upstream_error" });
     }
 
     // Extract all text blocks from the response
@@ -53,7 +69,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ text });
   } catch (err) {
-    console.error("Land AI proxy error:", err);
-    return res.status(500).json({ error: err.message || "Internal server error" });
+    console.error("LandPal proxy error:", err);
+    return res.status(500).json({ error: "server_error" });
   }
 }
